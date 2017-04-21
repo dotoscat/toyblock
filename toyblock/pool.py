@@ -10,7 +10,7 @@ class Pool(object):
         self.__used = deque(maxlen=maxlen)
 
     def get(self):
-        """Return a free instance, None otherwise.
+        """Return a free instance if avaliable, None otherwise.
         """
         if not self.__avaliable:
             return None
