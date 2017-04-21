@@ -3,10 +3,10 @@ class Pool(object):
     def __init__(self, class_, maxlen, *args, **kargs):
         from collections import deque
         self.__class_ = class_
-        self.__avaliable = deque(
-            [class_(*args, **kargs) for i in range(maxlen)],
-            maxlen
-            )
+        self.__avaliable = deque(maxlen=maxlen)
+        avaliable_append = self.__avaliable.append
+        for i in range(maxlen):
+            avaliable_append(class_(*args, **kargs))
         self.__used = deque(maxlen=maxlen)
 
     def get(self):
