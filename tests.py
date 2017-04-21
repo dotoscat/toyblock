@@ -1,5 +1,5 @@
 import unittest
-from toyblock import Pool
+from toyblock import Pool, Entity
 
 class A(object):
     def __init__(self):
@@ -28,3 +28,17 @@ class PoolTest(unittest.TestCase):
         instance = pool.get()
         self.assertTrue(pool.free(instance))
 
+class EntityTest(unittest.TestCase):
+    def setUp(self):
+        self.a = A()
+        self.b = B()
+        self.c = C()
+
+    def test_add_component(self):
+        entity = Entity()
+        self.assertTrue(entity.add_component(A, self.a))
+
+    def test_get_component(self):
+        entity = Entity()
+        self.assertTrue(entity.add_component(A, self.a))
+        self.assertEqual(entity.get_component(A), self.a)
