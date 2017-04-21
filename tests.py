@@ -1,11 +1,17 @@
 import unittest
 from toyblock import Pool
 
-class A:
-    pass
+class A(object):
+    def __init__(self):
+        self.x = 0
 
-class B:
-    pass
+class B(object):
+    def __init__(self):
+        self.x = 0
+
+class C(object):
+    def __init__(self):
+        self.x = 0
 
 class PoolTest(unittest.TestCase):
     def test_get(self):
@@ -21,3 +27,4 @@ class PoolTest(unittest.TestCase):
         pool = Pool(A, 3)
         instance = pool.get()
         self.assertTrue(pool.free(instance))
+
