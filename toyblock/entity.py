@@ -32,3 +32,5 @@ class Entity(object):
         """
         return self._component.pop(class_, None)
     
+    def __contains__(self, item):
+        return item in self._component
