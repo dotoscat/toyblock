@@ -25,6 +25,9 @@ class Entity(object):
         """Get a specific component."""
         return self._component.get(class_)
 
+    def get_components(self):
+        return self._component.values()
+
     def del_component(self, class_):
         """Delete a specific component.
 
