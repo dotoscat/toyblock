@@ -21,7 +21,7 @@ class Pool(object):
         return element
 
     def free(self, element):
-        """Mark the instance to be avaliable and return True
+        """Mark the instance to be avaliable and return True.
 
         Return False if it do not belong to the pool or is not used yet.
         """
