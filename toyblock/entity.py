@@ -14,7 +14,8 @@ class Entity(object):
         return True
 
     def get_component(self, class_):
-        return self.__component[class_]
+        return self.__component.get(class_)
 
     def del_component(self, class_):
-        del self.__component[class_]
+        return self.__component.pop(class_, None)
+    
