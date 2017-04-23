@@ -1,13 +1,15 @@
 class Pool(object):
     __slots__ = ('__class_', '__avaliable', '__used', '__instance')
     def __init__(self, class_, maxlen, *args, **kargs):
+        from collections import deque
         self.__class_ = class_
-        self.__avaliable = set()
-        avaliable_add = self.__avaliable.add
+        self.__avaliable = deque(maxlen=maxlen)
+        avaliable_append = self.__avaliable.append
         for i in range(maxlen):
             instance = class_(*args, **kargs)
-            avaliable_add(instance)
-        self.__used = set()
+            avaliable_append(instance)
+        self.__instance = set(self.__avaliable)
+        self.__used = deque(maxlen=maxlen)
 
     def get(self):
         """Return a free instance if avaliable, None otherwise.
@@ -15,7 +17,7 @@ class Pool(object):
         if not self.__avaliable:
             return None
         element = self.__avaliable.pop()
-        self.__used.add(element)
+        self.__used.append(element)
         return element
 
     def free(self, element):
@@ -25,6 +27,6 @@ class Pool(object):
         """
         if element not in self.__instance or element not in self.__used:
             return False
-        element = self.__used.pop()
+        self.__used.remove(element)
         self.__avaliable.append(element)
         return True
