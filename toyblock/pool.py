@@ -8,7 +8,6 @@ class Pool(object):
         for i in range(maxlen):
             instance = class_(*args, **kargs)
             avaliable_append(instance)
-        self._instance = set(self._avaliable)
         self._used = deque(maxlen=maxlen)
 
     def get(self):
@@ -25,7 +24,7 @@ class Pool(object):
 
         Return False if it do not belong to the pool or is not used yet.
         """
-        if element not in self._instance or element not in self._used:
+        if element not in self._used:
             return False
         self._used.remove(element)
         self._avaliable.append(element)

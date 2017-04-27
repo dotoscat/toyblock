@@ -59,10 +59,10 @@ class SystemTest(unittest.TestCase):
             self.assertTrue(entity.add_component(A, A()))
             self.assertTrue(entity.add_component(B, B()))
             self.assertTrue(self.system.add_entity(entity))
-        self.assertEqual(len(self.system._entities), 10)
+        self.assertEqual(len(self.system._entities), 100)
         for i in range(10):
             self.system.run()
-        print(self.system._entities)
+        #print(self.system._entities)
 
     def test2_run_system(self):
         print(self.system._entities)
