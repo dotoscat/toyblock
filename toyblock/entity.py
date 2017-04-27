@@ -8,6 +8,14 @@ class EntityNoTypeError(EntityError):
     def __str__(self):
         return "{} is not a type".format(self.class_)
 
+class EntityNoInstanceError(EntityError):
+    def __init__(self, instance, class_):
+        self.instance = instance
+        self.class_ = class_
+
+    def __str__(self):
+        return "{} is not an instance of {}".format(self.instance, self.class_)
+
 class Entity(object):
     __slots__ = ('_component')
     def __init__(self):
@@ -25,7 +33,7 @@ class Entity(object):
         if not isinstance(class_, type):
             raise EntityNoTypeError(class_)
         if not isinstance(instance, class_):
-            return False
+            raise EntityNoInstanceError(instance, class_)
         if class_ in self._component:
             return False
         self._component[class_] = instance
