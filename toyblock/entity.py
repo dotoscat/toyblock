@@ -1,3 +1,13 @@
+class EntityError(Exception):
+    pass
+
+class EntityNoTypeError(EntityError):
+    def __init__(self, class_):
+        self.class_ = class_
+    
+    def __str__(self):
+        return "{} is not a type".format(self.class_)
+
 class Entity(object):
     __slots__ = ('_component')
     def __init__(self):
@@ -13,7 +23,7 @@ class Entity(object):
         3) The type is already in the entity
         """
         if not isinstance(class_, type):
-            return False
+            raise EntityNoTypeError(class_)
         if not isinstance(instance, class_):
             return False
         if class_ in self._component:
