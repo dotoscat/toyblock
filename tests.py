@@ -1,5 +1,6 @@
 import unittest
 from toyblock import Pool, Entity, System
+import toyblock.entity
 
 class A(object):
     def __init__(self):
@@ -33,15 +34,30 @@ class EntityTest(unittest.TestCase):
         self.a = A()
         self.b = B()
         self.c = C()
+        self.entity = Entity()
 
-    def test_add_component(self):
-        entity = Entity()
-        self.assertTrue(entity.add_component(A, self.a))
+    def test1_add_component(self):
+        self.entity.add_component(A, self.a)
+        
+    def test2_get_component(self):
+        self.entity.add_component(A, self.a)
+        self.assertEqual(self.entity.get_component(A), self.a)
 
-    def test_get_component(self):
-        entity = Entity()
-        self.assertTrue(entity.add_component(A, self.a))
-        self.assertEqual(entity.get_component(A), self.a)
+    def test3_EntityNoTypeError(self):
+        self.assertRaises(toyblock.entity.EntityNoTypeError,
+                          self.entity.add_component,
+                          None, self.a)
+
+    def test4_EntityNoInstanceError(self):
+        self.assertRaises(toyblock.entity.EntityNoInstanceError,
+                          self.entity.add_component,
+                          A, self.b)
+
+    def test5_EntityComponentExistsError(self):
+        self.entity.add_component(A, self.a)
+        self.assertRaises(toyblock.entity.EntityComponentExistsError,
+                          self.entity.add_component,
+                          A, A())
 
 class SystemTest(unittest.TestCase):
     def setUp(self):
@@ -56,9 +72,9 @@ class SystemTest(unittest.TestCase):
 
     def test1_add_entities(self):
         for entity in self.entities:
-            self.assertTrue(entity.add_component(A, A()))
-            self.assertTrue(entity.add_component(B, B()))
-            self.assertTrue(self.system.add_entity(entity))
+            entity.add_component(A, A())
+            entity.add_component(B, B())
+            self.system.add_entity(entity)
         self.assertEqual(len(self.system._entities), 100)
         for i in range(10):
             self.system.run()
