@@ -16,28 +16,28 @@ class EntityNoInstanceError(EntityError):
     def __str__(self):
         return "{} is not an instance of {}".format(self.instance, self.class_)
 
+class EntityComponentExistsError(EntityError):
+    def __init__(self, class_, entity):
+        self.class_ = class_
+        self.entity = entity
+
+    def __str__(self):
+        return "{} already exists in {}".format(self.class_, self.entity)
+
 class Entity(object):
     __slots__ = ('_component')
     def __init__(self):
         self._component = {}
 
     def add_component(self, class_, instance):
-        """Add a component to this entity.
-
-        Return True if done.
-        Return False if...
-        1) instance is not an instance of class_
-        2) class_ is not a type
-        3) The type is already in the entity
-        """
+        """Add a component to this entity."""
         if not isinstance(class_, type):
             raise EntityNoTypeError(class_)
         if not isinstance(instance, class_):
             raise EntityNoInstanceError(instance, class_)
         if class_ in self._component:
-            return False
+            raise EntityComponentExistsError(class_, self)
         self._component[class_] = instance
-        return True
 
     def get_component(self, class_):
         """Get a specific component."""
