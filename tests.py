@@ -62,9 +62,9 @@ class EntityTest(unittest.TestCase):
 class SystemTest(unittest.TestCase):
     def setUp(self):
 
-        def update(b, a):
+        def update(entity, b, a):
             b.b += 1
-            a.a = a.a*2
+            a.a = a.a
         
         self.system = System(update, (B, A))
         self.entities = [Entity() for i in range(100)]

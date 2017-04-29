@@ -26,7 +26,7 @@ class System(object):
         classes = self._classes
         for entity in entities:
             components = entity.get_components(classes)
-            callable_(*components)
+            callable_(entity, *components)
 
     def __len__(self):
         return len(self._entities)
