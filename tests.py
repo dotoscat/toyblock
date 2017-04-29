@@ -4,15 +4,15 @@ import toyblock.entity
 
 class A(object):
     def __init__(self):
-        self.x = 0
+        self.a = 0
 
 class B(object):
     def __init__(self):
-        self.x = 0
+        self.b = 0
 
 class C(object):
     def __init__(self):
-        self.x = 0
+        self.c = 0
 
 class PoolTest(unittest.TestCase):
     def test_get(self):
@@ -62,12 +62,11 @@ class EntityTest(unittest.TestCase):
 class SystemTest(unittest.TestCase):
     def setUp(self):
 
-        def update(a, b):
-            a.x += 1
-            b.x = a.x*2
-            #print(a.x, b.x)
+        def update(b, a):
+            b.b += 1
+            a.a = a.a*2
         
-        self.system = System(update, (A, B))
+        self.system = System(update, (B, A))
         self.entities = [Entity() for i in range(100)]
 
     def test1_add_entities(self):
@@ -76,12 +75,9 @@ class SystemTest(unittest.TestCase):
             entity.add_component(B, B())
             self.system.add_entity(entity)
         self.assertEqual(len(self.system._entities), 100)
-        for i in range(10):
-            self.system.run()
-        #print(self.system._entities)
 
     def test2_run_system(self):
-        print(self.system._entities)
+        self.test1_add_entities()
         for i in range(10):
             self.system.run()
 
