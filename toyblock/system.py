@@ -1,14 +1,14 @@
 class System(object):
-    slots = ('_class_', '_callable_', '_entities')
-    def __init__(self, callable_, classes_):
+    slots = ('_classes', '_callable_', '_entities')
+    def __init__(self, callable_, classes):
         from collections import deque
-        self._class_ = classes_
+        self._classes = classes
         self._callable_ = callable_
         self._entities = deque()
 
     def add_entity(self, entity):
-        _class_ = self._class_
-        for class_ in _class_:
+        classes = self._classes
+        for class_ in classes:
             if class_ not in entity:
                 return False
         self._entities.append(entity)
@@ -23,8 +23,9 @@ class System(object):
     def run(self):
         entities = self._entities
         callable_ = self._callable_
+        classes = self._classes
         for entity in entities:
-            components = entity.get_components()
+            components = entity.get_components(classes)
             callable_(*components)
 
     def __len__(self):
