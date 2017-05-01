@@ -45,6 +45,7 @@ class Entity(object):
         return self._component.get(class_)
 
     def get_components(self, classes):
+        """Get requested componentes specified in order."""
         self._cache.clear()
         cache_append = self._cache.append
         component_get = self._component.get
