@@ -1,3 +1,19 @@
+class SystemError(Exception):
+    pass
+
+class SystemNotSatisfactoryEntityError(SystemError):
+    def __init__(self, system, class_, entity):
+        self.system = system
+        self.class_ = class_
+        self.entity = entity
+
+    def __str__(self):
+        return "{}: component {} not in entity {}".format(
+            self.system,
+            self.class_,
+            self.entity
+            )
+
 class System(object):
     slots = ('_classes', '_callable_', '_entities')
     def __init__(self, callable_, classes):
@@ -10,9 +26,8 @@ class System(object):
         classes = self._classes
         for class_ in classes:
             if class_ not in entity:
-                return False
+                raise SystemNotSatisfactoryEntityError(self, class_, entity)
         self._entities.append(entity)
-        return True
 
     def remove_entity(self, entity):
         if entity not in self._entities:

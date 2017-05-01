@@ -1,6 +1,7 @@
 import unittest
 from toyblock import Pool, Entity, System
 import toyblock.entity
+import toyblock.system
 
 class A(object):
     def __init__(self):
@@ -80,3 +81,11 @@ class SystemTest(unittest.TestCase):
         self.test1_add_entities()
         for i in range(10):
             self.system.run()
+
+    def test3_rogue_entity(self):
+        rogue = Entity()
+        rogue.add_component(C, C())
+        rogue.add_component(A, A())
+        self.assertRaises(toyblock.system.SystemNotSatisfactoryEntityError,
+                          self.system.add_entity,
+                          rogue)
