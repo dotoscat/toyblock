@@ -80,17 +80,3 @@ class SystemTest(unittest.TestCase):
         self.test1_add_entities()
         for i in range(10):
             self.system.run()
-
-def esto(uno, dos):
-    uno.x += 1
-    dos.x += 1
-
-class Ahuevo:
-    def __init__(self):
-        self.system = System(esto, (A, B))
-        self.entities = [Entity() for i in range(10)]
-        for i in self.entities:
-            i.add_component(A, A())
-            i.add_component(B, B())
-            self.system.add_entity(i)
-        
