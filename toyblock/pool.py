@@ -1,13 +1,19 @@
 class Pool(object):
-    __slots__ = ('_class_', '_avaliable', '_used', '_instance')
-    def __init__(self, class_, maxlen, *args, **kargs):
+    """
+    A Pool is used for cache created objects
+    """
+    __slots__ = ('_avaliable', '_used')
+    def __init__(self, maxlen, classes):
         from collections import deque
-        self._class_ = class_
+        from entity import Entity
         self._avaliable = deque(maxlen=maxlen)
         avaliable_append = self._avaliable.append
         for i in range(maxlen):
-            instance = class_(*args, **kargs)
-            avaliable_append(instance)
+            entity = Entity()
+            entity_add_component = entity.add_component
+            for class_ in classes:
+                entity_add_component(class_, class_())
+            avaliable_append(entity)
         self._used = deque(maxlen=maxlen)
 
     def get(self):
