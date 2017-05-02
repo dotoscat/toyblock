@@ -15,7 +15,7 @@ class SystemNotSatisfactoryEntityError(SystemError):
             )
 
 class System(object):
-    slots = ('_classes', '_callable_', '_entities')
+    __slots__ = ('_classes', '_callable_', '_entities')
     def __init__(self, callable_, classes):
         from collections import deque
         self._classes = classes
