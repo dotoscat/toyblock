@@ -22,7 +22,7 @@ class EntityComponentExistsError(EntityError):
         self.entity = entity
 
     def __str__(self):
-        return "{} already exists in {}".format(self.class_, self.entity)
+        return "Component {} already exists in entity {}".format(self.class_, self.entity)
 
 class Entity(object):
     __slots__ = ('_component', '_cache')
