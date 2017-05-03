@@ -16,17 +16,17 @@ class C(object):
         self.c = 0
 
 class PoolTest(unittest.TestCase):
-    def test_get(self):
-        unique = Pool(A, 1)
+    def test1_get(self):
+        unique = Pool(2, (A,))
         instance = unique.get()
-        self.assertEqual(isinstance(instance, A), True)
+        self.assertEqual(isinstance(instance, Entity), True)
 
-    def test_empty(self):
-        empty = Pool(A, 0)
+    def test2_empty(self):
+        empty = Pool(0, (A,))
         self.assertEqual(empty.get(), None)
 
-    def test_free(self):
-        pool = Pool(A, 3)
+    def test3_free(self):
+        pool = Pool(3, (A,))
         instance = pool.get()
         self.assertTrue(pool.free(instance))
 
@@ -67,7 +67,7 @@ class SystemTest(unittest.TestCase):
             b.b += 1
             a.a = b.b*2
         
-        self.system = System(update, (B, A))
+        self.system = System((B, A), update)
         self.entities = [Entity() for i in range(100)]
 
     def test1_add_entities(self):

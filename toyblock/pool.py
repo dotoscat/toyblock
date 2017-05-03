@@ -5,7 +5,8 @@ class Pool(object):
     __slots__ = ('_avaliable', '_used')
     def __init__(self, maxlen, classes):
         from collections import deque
-        from entity import Entity
+        from . import entity
+        Entity = entity.Entity
         self._avaliable = deque(maxlen=maxlen)
         avaliable_append = self._avaliable.append
         for i in range(maxlen):
