@@ -82,10 +82,3 @@ class SystemTest(unittest.TestCase):
         for i in range(10):
             self.system.run()
 
-    def test3_rogue_entity(self):
-        rogue = Entity()
-        rogue.add_component(C, C())
-        rogue.add_component(A, A())
-        self.assertRaises(toyblock.system.SystemNotSatisfactoryEntityError,
-                          self.system.add_entity,
-                          rogue)
