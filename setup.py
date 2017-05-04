@@ -5,7 +5,7 @@ setup(
     version='1.0.0',
     description='A pythonic and fast Entity-Component-System written in pure Python',
     long_description='',
-    url='',
+    url='https://github.com/dotoscat/toyblock',
     author='Oscar Triano \'dotoscat\'',
     license='GPL-3.0',
     classifiers=[
