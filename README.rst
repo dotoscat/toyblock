@@ -50,5 +50,6 @@ Toyblock provides you a Pool. A Pool helps you to manage large groups of entitie
 (such bullets or enemies) and caches them for speed
 
 ::
+
 	a_pool = toyblock.Pool(1000, (B, A)) # A pool of 1000 entities with A and B component
 	a_entity = a_pool.get() # Get an avaliable entity
