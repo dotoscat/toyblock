@@ -38,27 +38,21 @@ class EntityTest(unittest.TestCase):
         self.entity = Entity()
 
     def test1_add_component(self):
-        self.entity.add_component(A, self.a)
+        self.entity.add_component(self.a)
         
     def test2_get_component(self):
-        self.entity.add_component(A, self.a)
+        self.entity.add_component(self.a)
         self.assertEqual(self.entity.get_component(A), self.a)
 
-    def test3_EntityNoTypeError(self):
-        self.assertRaises(toyblock.entity.EntityNoTypeError,
-                          self.entity.add_component,
-                          None, self.a)
-
-    def test4_EntityNoInstanceError(self):
-        self.assertRaises(toyblock.entity.EntityNoInstanceError,
-                          self.entity.add_component,
-                          A, self.b)
-
-    def test5_EntityComponentExistsError(self):
-        self.entity.add_component(A, self.a)
+    def test3_EntityComponentExistsError(self):
+        self.entity.add_component(self.a)
         self.assertRaises(toyblock.entity.EntityComponentExistsError,
-                          self.entity.add_component,
-                          A, A())
+                          self.entity.add_component, A())
+    
+    def test4_entity_creation_with_components(self):
+        entity = Entity(self.a, self.b)
+        self.assertEqual(entity.get_component(A), self.a)
+        self.assertEqual(entity.get_component(B), self.b)
 
 class SystemTest(unittest.TestCase):
     def setUp(self):
@@ -78,8 +72,8 @@ class SystemTest(unittest.TestCase):
 
     def _add_entities_to_system(self):
         for entity in self.entities:
-            entity.add_component(A, A())
-            entity.add_component(B, B())
+            entity.add_component(A())
+            entity.add_component(B())
             self.system.add_entity(entity)
         
     def test1_add_entities(self):
@@ -88,8 +82,8 @@ class SystemTest(unittest.TestCase):
 
     def test2_run_system(self):
         entity = Entity()
-        entity.add_component(A, A())
-        entity.add_component(B, B())
+        entity.add_component(A())
+        entity.add_component(B())
         self.system.add_entity(entity)
         self.system.run()
         self.assertEqual(entity.get_component(A).a, 2)
