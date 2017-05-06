@@ -16,21 +16,6 @@
 class EntityError(Exception):
     pass
 
-class EntityNoTypeError(EntityError):
-    def __init__(self, class_):
-        self.class_ = class_
-    
-    def __str__(self):
-        return "{} is not a type".format(self.class_)
-
-class EntityNoInstanceError(EntityError):
-    def __init__(self, instance, class_):
-        self.instance = instance
-        self.class_ = class_
-
-    def __str__(self):
-        return "{} is not an instance of {}".format(self.instance, self.class_)
-
 class EntityComponentExistsError(EntityError):
     def __init__(self, class_, entity):
         self.class_ = class_
@@ -40,30 +25,27 @@ class EntityComponentExistsError(EntityError):
         return "Component {} already exists in entity {}".format(self.class_, self.entity)
 
 class Entity(object):
-    __slots__ = ('_component')
+    __slots__ = ('_components')
     def __init__(self):
-        self._component = {}
+        self._components = {}
 
-    def add_component(self, class_, instance):
+    def add_component(self, instance):
         """Add a component to this entity."""
-        if not isinstance(class_, type):
-            raise EntityNoTypeError(class_)
-        if not isinstance(instance, class_):
-            raise EntityNoInstanceError(instance, class_)
-        if class_ in self._component:
-            raise EntityComponentExistsError(class_, self)
-        self._component[class_] = instance
+        type_ = type(instance)
+        if type_ in self._components:
+            raise EntityComponentExistsError(type_, self)
+        self._component[type_] = instance
 
-    def get_component(self, class_):
+    def get_component(self, type_):
         """Get a specific component."""
-        return self._component.get(class_)
+        return self._components.get(type_)
 
-    def del_component(self, class_):
+    def del_component(self, type_):
         """Delete a specific component.
 
         Return the deleted component(instance), None if not exists.
         """
-        return self._component.pop(class_, None)
+        return self._components.pop(type_, None)
     
     def __contains__(self, item):
-        return item in self._component
+        return item in self._components
