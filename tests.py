@@ -63,12 +63,15 @@ class EntityTest(unittest.TestCase):
 class SystemTest(unittest.TestCase):
     def setUp(self):
 
-        def update(system, entity, b, a):
+        def update(system, entity, b, a, random):
+            self.assertEqual(random, "Hello world!")
             b.b += 1
             a.a = b.b*2
             a.system = system
         
-        self.system = System((B, A), update)
+        random = "Hello world!"
+        
+        self.system = System((B, A), update, random)
         self.entities = [Entity() for i in range(100)]
 
     def _add_entities_to_system(self):
