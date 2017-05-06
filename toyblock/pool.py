@@ -18,7 +18,7 @@ class Pool(object):
     A Pool is used for cache created objects
     """
     __slots__ = ('_avaliable', '_used')
-    def __init__(self, maxlen, classes):
+    def __init__(self, maxlen, types):
         from collections import deque
         from . import entity
         Entity = entity.Entity
@@ -27,8 +27,8 @@ class Pool(object):
         for i in range(maxlen):
             entity = Entity()
             entity_add_component = entity.add_component
-            for class_ in classes:
-                entity_add_component(class_, class_())
+            for type_ in types:
+                entity_add_component(type_())
             avaliable_append(entity)
         self._used = deque(maxlen=maxlen)
 
