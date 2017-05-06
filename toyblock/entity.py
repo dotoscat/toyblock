@@ -26,15 +26,18 @@ class EntityComponentExistsError(EntityError):
 
 class Entity(object):
     __slots__ = ('_components')
-    def __init__(self):
+    def __init__(self, *instances):
         self._components = {}
+        add_component = self.add_component
+        for instance in instances:
+            add_component(instance)
 
     def add_component(self, instance):
         """Add a component to this entity."""
         type_ = type(instance)
         if type_ in self._components:
             raise EntityComponentExistsError(type_, self)
-        self._component[type_] = instance
+        self._components[type_] = instance
 
     def get_component(self, type_):
         """Get a specific component."""
