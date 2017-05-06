@@ -14,11 +14,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class System(object):
-    __slots__ = ('_classes', '_callable_', '_entities', '_args', '_kwargs',
-                '_entities_removed', '_entities_added', '_locked')
-    def __init__(self, classes, callable_, *args, **kwargs):
+    def __init__(self, callable_, *args, **kwargs):
         from collections import deque
-        self._classes = classes
         self._callable_ = callable_
         self._entities = deque()
         self._args = args
@@ -42,13 +39,11 @@ class System(object):
     def run(self):
         entities = self._entities
         callable_ = self._callable_
-        classes = self._classes
         args = self._args
         kwargs = self._kwargs
         self._locked = True
         for entity in entities:
-            components = entity.get_components(classes)
-            callable_(self, entity, *components, *args, **kwargs)
+            callable_(self, entity, *args, **kwargs)
         self._locked = False
         entities_removed = self._entities_removed
         entities_added = self._entities_added

@@ -40,10 +40,9 @@ class EntityComponentExistsError(EntityError):
         return "Component {} already exists in entity {}".format(self.class_, self.entity)
 
 class Entity(object):
-    __slots__ = ('_component', '_cache')
+    __slots__ = ('_component')
     def __init__(self):
         self._component = {}
-        self._cache = []
 
     def add_component(self, class_, instance):
         """Add a component to this entity."""
@@ -58,15 +57,6 @@ class Entity(object):
     def get_component(self, class_):
         """Get a specific component."""
         return self._component.get(class_)
-
-    def get_components(self, classes):
-        """Get requested componentes specified in order."""
-        self._cache.clear()
-        cache_append = self._cache.append
-        component_get = self._component.get
-        for class_ in classes:
-            cache_append(component_get(class_))
-        return self._cache
 
     def del_component(self, class_):
         """Delete a specific component.
