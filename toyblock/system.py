@@ -48,7 +48,7 @@ class System(object):
         self._locked = True
         for entity in entities:
             components = entity.get_components(classes)
-            callable_(entity, *components, *args, **kwargs)
+            callable_(self, entity, *components, *args, **kwargs)
         self._locked = False
         entities_removed = self._entities_removed
         entities_added = self._entities_added
