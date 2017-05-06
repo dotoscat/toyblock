@@ -14,7 +14,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class System(object):
-    __slots__ = ('_classes', '_callable_', '_entities', '_args', '_kwargs')
+    __slots__ = ('_classes', '_callable_', '_entities', '_args', '_kwargs',
+                '_entities_removed', '_entities_added', '_locked')
     def __init__(self, classes, callable_, *args, **kwargs):
         from collections import deque
         self._classes = classes
@@ -22,12 +23,21 @@ class System(object):
         self._entities = deque()
         self._args = args
         self._kwargs = kwargs
-
+        self._locked = False
+        self._entities_removed = deque()
+        self._entities_added = deque()
+		
     def add_entity(self, entity):
-        self._entities.append(entity)
+        if self._locked:
+            self._entities_added.append(entity)
+        else:
+            self._entities.append(entity)
 
     def remove_entity(self, entity):
-        self._entities.remove(entity)
+        if self._locked:
+            self._entities_removed.append(entity)
+        else:
+            self._entities.remove(entity)
         
     def run(self):
         entities = self._entities
@@ -35,10 +45,20 @@ class System(object):
         classes = self._classes
         args = self._args
         kwargs = self._kwargs
+        self._locked = True
         for entity in entities:
             components = entity.get_components(classes)
             callable_(entity, *components, *args, **kwargs)
-
+        self._locked = False
+        entities_removed = self._entities_removed
+        entities_added = self._entities_added
+        while len(entities_removed):
+            entity = entities_removed.pop()
+            entities.remove(entity)
+        while len(entities_added):
+            entity = entities_added.pop()
+            entities.append(entity)
+            
     def __contains__(self, entity):
         return entity in self._entities
 
