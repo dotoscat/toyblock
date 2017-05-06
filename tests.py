@@ -70,15 +70,21 @@ class SystemTest(unittest.TestCase):
         self.system = System((B, A), update)
         self.entities = [Entity() for i in range(100)]
 
-    def test1_add_entities(self):
+    def _add_entities_to_system(self):
         for entity in self.entities:
             entity.add_component(A, A())
             entity.add_component(B, B())
             self.system.add_entity(entity)
+        
+    def test1_add_entities(self):
+        self._add_entities_to_system()
         self.assertEqual(len(self.system._entities), 100)
 
     def test2_run_system(self):
-        self.test1_add_entities()
-        for i in range(10):
-            self.system.run()
-
+        entity = Entity()
+        entity.add_component(A, A())
+        entity.add_component(B, B())
+        self.system.add_entity(entity)
+        self.system.run()
+        self.assertEqual(entity.get_component(A).a, 2)
+    
