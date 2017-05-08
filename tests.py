@@ -88,4 +88,19 @@ class SystemTest(unittest.TestCase):
         self.system.run()
         self.assertEqual(entity.get_component(A).a, 2)
         self.assertEqual(entity.get_component(A).system, self.system)
+        
+    def test3_manipulate_entities(self):
+        one = Entity()
+        two = Entity()
     
+        def do_something(system, entity, two):
+            system.remove_entity(entity)
+            system.add_entity(two)
+            self.assertFalse(two in entity)
+    
+        system = System(do_something, two)
+        system.add_entity(one)
+        system.run()
+        self.assertFalse(one in system)
+        self.assertTrue(two in system)
+        
