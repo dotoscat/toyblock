@@ -17,6 +17,9 @@ class EntityError(Exception):
     pass
 
 class EntityComponentExistsError(EntityError):
+    """This exception is only raised when a type of a component already
+    exists as key on the entity.
+    """
     def __init__(self, class_, entity):
         self.class_ = class_
         self.entity = entity
@@ -25,6 +28,16 @@ class EntityComponentExistsError(EntityError):
         return "Component {} already exists in entity {}".format(self.class_, self.entity)
 
 class Entity(object):
+    """Entity use the type of the instances used as components as key
+    for the instance.
+    
+    You will not find two instances of the same kind in a entity.
+    
+    You can pass different instances to the constructor.
+        
+    `Entity(MyBody(x, y), CoolGraphics())`
+    
+    """
     __slots__ = ('_components')
     def __init__(self, *instances):
         self._components = {}
@@ -33,7 +46,10 @@ class Entity(object):
             add_component(instance)
 
     def add_component(self, instance):
-        """Add a component to this entity."""
+        """Add a component to this entity.
+        
+        It raises 'EntityComponentExistsError' if the type of instance is already used.
+        """
         type_ = type(instance)
         if type_ in self._components:
             raise EntityComponentExistsError(type_, self)
