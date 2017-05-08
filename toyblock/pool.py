@@ -17,7 +17,7 @@ class Pool(object):
     """
     A Pool is used for cache created objects and increase performance
     
-    .. Note::
+    .. note::
     
         This is an experimental class
     """

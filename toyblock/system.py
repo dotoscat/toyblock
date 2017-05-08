@@ -14,6 +14,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class System(object):
+    """
+    A bunch of entities by themselves are useless. You must add them
+    to a system, then interact with them.
+    
+    In the constructor is mandatory pass a callable. You can pass other arguments
+    that will passed to the callable for each entity.
+    
+    .. note::
+    
+        The callable signature is (system, entity, *args, **kwargs)
+    
+    
+    After you add at least one entity you can run the system anytime with the method *run()*
+    """
     def __init__(self, callable_, *args, **kwargs):
         from collections import deque
         self._callable_ = callable_
@@ -37,6 +51,9 @@ class System(object):
             self._entities.remove(entity)
         
     def run(self):
+        """Run the system. In the callable is perfectly safe add or remove entities
+        to the system.
+        """
         entities = self._entities
         callable_ = self._callable_
         args = self._args
