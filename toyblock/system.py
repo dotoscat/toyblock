@@ -23,8 +23,7 @@ class System(object):
     
     .. note::
     
-        The callable signature is (system, entity, *args, **kwargs)
-    
+        The callable signature is (system, entity, *args, **kwargs).
     
     After you add at least one entity you can run the system anytime with the method *run()*
     """
