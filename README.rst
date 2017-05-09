@@ -54,3 +54,4 @@ Toyblock provides you a Pool. A Pool helps you to manage large groups of entitie
 
 	a_pool = toyblock.Pool(1000, (B, A)) # A pool of 1000 entities with A and B component
 	a_entity = a_pool.get() # Get an avaliable entity
+    a_pool.free(a_entity)
