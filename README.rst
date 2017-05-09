@@ -33,6 +33,7 @@ Example usage
 			
 	def multiply_with_time(system, entity, time):
 		"""This will be the callable for our system."""
+        
         b = entity.get_component(B)
         a = entity.get_component(A)
 		b.b = a.x*2*time()
