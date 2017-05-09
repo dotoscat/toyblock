@@ -23,31 +23,31 @@ Example usage
 	#Our components for the entity
 	class A:
 		def __init__(self):
-			self.x = 0.1
+			self.x = 1
 			
 	class B:
 		def __init__(self):
 			self.b = 0	
 
-	entity = toyblock.Entity()
-	#We add a component using the type as first argument and an instance of that type
-	entity.add_component(A, A())
-	entity.add_component(B, B()) #The order does not matter here
+	entity = toyblock.Entity(A(), B()) #The order does not matter here
 			
-	def multiply_with_time(entity, b, a, time):
+	def multiply_with_time(system, entity, time):
 		"""This will be the callable for our system."""
+        b = entity.get_component(B)
+        a = entity.get_component(A)
 		b.b = a.x*2*time()
+        if b.b > 3:
+            system.remove_entity(entity)
 		
-	main_system = toyblock.System((B, A), multiply_with_time, time) #Here the order DOES matter
+	main_system = toyblock.System(multiply_with_time, time)
 	main_system.add_entity(entity)
 	main_system.run() #Run the system
-	# This is the basics
 
 Pool
 ----
 
 Toyblock provides you a Pool. A Pool helps you to manage large groups of entities
-(such bullets or enemies) and caches them for speed
+(such bullets or enemies) and caches them for speed. Actually this is an experimental feature.
 
 ::
 
