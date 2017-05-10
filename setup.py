@@ -12,7 +12,6 @@ setup(
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries'
-        'Topic :: Software Development :: Libraries :: Application Frameworks',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 2',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
