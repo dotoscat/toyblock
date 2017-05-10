@@ -9,7 +9,7 @@ setup(
     author='Oscar Triano \'dotoscat\'',
     license='GPL-3.0',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries'
         'Topic :: Software Development :: Libraries :: Application Frameworks',
