@@ -2,6 +2,9 @@
 TOYBLOCK
 ========
 
+..  image:: toyblock_logo.png
+    :alt: TOYBLOCK
+
 Toyblock is yet another entity component system written in pure Python
 being fast as possible.
 
