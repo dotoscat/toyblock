@@ -8,6 +8,12 @@ TOYBLOCK
 Toyblock is yet another entity component system written in pure Python
 being fast as possible.
 
+License
+-------
+
+..  image:: https://www.gnu.org/graphics/lgplv3-147x51.png
+    :alt: LGPL-3.0
+
 Installation
 ------------
 
