@@ -7,7 +7,7 @@ setup(
     long_description=open('README.rst').read(),
     url='https://github.com/dotoscat/toyblock',
     author='Oscar Triano \'dotoscat\'',
-    license='GPL-3.0',
+    license='LGPL-3.0',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
