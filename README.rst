@@ -57,7 +57,7 @@ Pool
 ----
 
 Toyblock provides you a Pool. A Pool helps you to manage large groups of entities
-(such bullets or enemies) and caches them for speed. Actually this is an experimental feature.
+(such bullets or enemies) and caches them for speed.
 
 ::
 

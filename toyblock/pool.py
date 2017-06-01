@@ -15,11 +15,7 @@
 
 class Pool(object):
     """
-    A Pool is used for cache created objects and increase performance
-    
-    .. note::
-    
-        This is an experimental class
+    A Pool is used for cache created objects and increase performance.
     """
     __slots__ = ('_avaliable', '_used')
     def __init__(self, maxlen, types):
