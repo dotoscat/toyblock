@@ -46,7 +46,7 @@ class Entity(object):
             add_component(instance)
 
     def add_component(self, instance):
-        """Add a component to this entity.
+        """Add a component instance to this entity.
         
         It raises 'EntityComponentExistsError' if the type of instance is already used.
         """
