@@ -17,7 +17,8 @@ class Pool(object):
     """
     A Pool is used for cache created objects and increase performance.
     """
-    __slots__ = ('_avaliable', '_used')
+    __slots__ = ("_avaliable", "_used", "_avaliable_pop",
+        "_used_append", "_used_remove", "_avaliable_append")
     def __init__(self, maxlen, types, args_for_types=()):
         """
         Parameters:
@@ -68,14 +69,20 @@ class Pool(object):
                 entity_add_component(instance)
             avaliable_append(entity)
         self._used = deque(maxlen=maxlen)
+        
+        #Remap methods to be used directly
+        self._avaliable_pop = self._avaliable.pop
+        self._used_append = self._used.append
+        self._used_remove = self._used.remove
+        self._avaliable_append = self._avaliable.append
 
     def get(self):
         """Return a free instance if avaliable, None otherwise.
         """
         if not self._avaliable:
             return None
-        element = self._avaliable.pop()
-        self._used.append(element)
+        element = self._avaliable_pop()
+        self._used_append(element)
         return element
 
     def free(self, element):
