@@ -43,7 +43,7 @@ class PoolTest(unittest.TestCase):
             None
         )
         
-        pool = Pool(1000000, (A, D, C), args)
+        pool = Pool(1000, (A, D, C), args)
         one = pool.get()
         one_d = one.get_component(D)
         self.assertEqual(one_d.v, 1)
