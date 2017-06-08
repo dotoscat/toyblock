@@ -18,17 +18,54 @@ class Pool(object):
     A Pool is used for cache created objects and increase performance.
     """
     __slots__ = ('_avaliable', '_used')
-    def __init__(self, maxlen, types):
+    def __init__(self, maxlen, types, args_for_types=()):
+        """
+        Parameters:
+        
+        maxlen: Number of entities (Number).
+        types: Types for the entities (Sequence) with the classes.
+        args_for_types: Tuples of args for the instances of types
+        [(args, kwargs), ...]
+        
+        Example of use
+        
+        arguments = (
+            (
+                (1, 2),
+                None
+            ),
+            (
+                None,
+                {"a": 7}
+            ),
+            None
+        )
+        
+        pool = toyblock.Pool(10, (A, B, C), arguments)
+        
+        """
         from collections import deque
         from . import entity
+        try:
+            from itertools import zip_longest
+        except:
+            from itertools import izip_longest as zip_longest
         Entity = entity.Entity
         self._avaliable = deque(maxlen=maxlen)
         avaliable_append = self._avaliable.append
+        EMPTY_TUPLE = ()
+        EMPTY_DICT = {}
+        EMPTY_ARGS = (None, None)
         for i in range(maxlen):
             entity = Entity()
             entity_add_component = entity.add_component
-            for type_ in types:
-                entity_add_component(type_())
+            for pair in zip_longest(types, args_for_types):
+                type_, type_args = pair
+                args, kwargs = EMPTY_ARGS if type_args is None else type_args
+                args = EMPTY_TUPLE if args is None else args
+                kwargs = EMPTY_DICT if kwargs is None else kwargs
+                instance = type_(*args, **kwargs)
+                entity_add_component(instance)
             avaliable_append(entity)
         self._used = deque(maxlen=maxlen)
 

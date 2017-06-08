@@ -9,3 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - GPL license to LGPL license.
 - Pool is not an experimental feature anymore.
+
+## [2017-06-08] - 1.2.0
+
+### Added
+
+- args and kwargs for instancing in Pool constructor
+- New tests for Pool

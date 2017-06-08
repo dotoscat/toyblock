@@ -15,6 +15,11 @@ class C(object):
     def __init__(self):
         self.c = 0
 
+class D(object):
+    def __init__(self, v, d=0):
+        self.v = v
+        self.d = d
+
 class PoolTest(unittest.TestCase):
     def test1_get(self):
         unique = Pool(2, (A,))
@@ -29,6 +34,22 @@ class PoolTest(unittest.TestCase):
         pool = Pool(3, (A,))
         instance = pool.get()
         self.assertTrue(pool.free(instance))
+        
+    def test5_var_args(self):
+        
+        args = (
+            None,
+            ((1,), {'d': 7}),
+            None
+        )
+        
+        pool = Pool(1000000, (A, D, C), args)
+        one = pool.get()
+        one_d = one.get_component(D)
+        self.assertEqual(one_d.v, 1)
+        self.assertEqual(one_d.d, 7)
+        self.assertEqual(one.get_component(A).a, 0)
+        
 
 class EntityTest(unittest.TestCase):
     def setUp(self):
