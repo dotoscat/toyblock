@@ -37,17 +37,23 @@ class System(object):
         self._entities_removed = deque()
         self._entities_added = deque()
         
+        #Remap some methods
+        self._entities_added_append = self._entities_added.append
+        self._entities_append = self._entities.append
+        self._entities_removed_append = self._entities_removed.append
+        self._entities_remove = self._entities.remove
+        
     def add_entity(self, entity):
         if self._locked:
-            self._entities_added.append(entity)
+            self._entities_added_append(entity)
         else:
-            self._entities.append(entity)
+            self._entities_append(entity)
 
     def remove_entity(self, entity):
         if self._locked:
-            self._entities_removed.append(entity)
+            self._entities_removed_append(entity)
         else:
-            self._entities.remove(entity)
+            self._entities_remove(entity)
         
     def run(self):
         """Run the system. In the callable is perfectly safe add or remove entities
