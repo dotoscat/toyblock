@@ -21,13 +21,40 @@ API
 *toyblock.Entity*
 .................
 
-
 It's just a bag for components to be used with *toyblock.System*.
 
 - *toyblock.Entity([_instance_, ...])*
 - *toyblock.Entity.add_component(_instance_)*
 - *toyblock.Entity.get_component(_type_of_instance_)*
 - *toyblock.Entity.del_component(_type_of_instance_)*
+
+*toyblock.Pool*
+...............
+
+A pool of entities that helps you to cache the entities and manage them.
+Here you pass the classes or types for instanciate them and create the
+entities. You can provide a list of arguments (args and kwargs) for the
+instances.
+
+- *toyblock.Pool(number_of_entities, ([_type_of_instance, ...]), [(tuple_args|None, dict_kwargs|None) | None, ...])*
+- *toyblock.Pool.get()*
+- *toyblock.Pool.free(_entity_)*
+
+Pool example
+++++++++++++
+
+::
+
+    arguments = (
+        ((32, 32), {"visible": False}),
+        (640, None),
+        # You can omit arguments for the third class or just None
+    )
+    
+    my_pool = toyblock.Pool(100, (Body, Jump, Graphics), arguments)
+    # You can omit 'arguments' too if the classes do not need any.
+    a_entity = my_pool.get()
+    my_pool.free(a_entity)
 
 Example usage
 -------------
@@ -60,18 +87,6 @@ Example usage
     main_system = toyblock.System(multiply_with_time, time)
     main_system.add_entity(entity)
     main_system.run() #Run the system
-
-Pool
-----
-
-Toyblock provides you a Pool. A Pool helps you to manage large groups of entities
-(such bullets or enemies) and caches them for speed.
-
-::
-
-    a_pool = toyblock.Pool(1000, (B, A)) # A pool of 1000 entities with A and B component
-    a_entity = a_pool.get() # Get an avaliable entity
-    a_pool.free(a_entity)
 
 License
 -------
