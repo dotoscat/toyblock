@@ -8,12 +8,6 @@ TOYBLOCK
 Toyblock is yet another entity component system written in pure Python
 being fast as possible.
 
-License
--------
-
-..  image:: https://www.gnu.org/graphics/lgplv3-147x51.png
-    :alt: LGPL-3.0
-
 Installation
 ------------
 
@@ -38,7 +32,7 @@ Example usage
         def __init__(self):
             self.b = 0    
 
-    entity = toyblock.Entity(A(), B()) #The order does not matter here
+    entity = toyblock.Entity(A(), B()) #The order does not matter
             
     def multiply_with_time(system, entity, time):
         """This will be the callable for our system."""
@@ -64,3 +58,9 @@ Toyblock provides you a Pool. A Pool helps you to manage large groups of entitie
     a_pool = toyblock.Pool(1000, (B, A)) # A pool of 1000 entities with A and B component
     a_entity = a_pool.get() # Get an avaliable entity
     a_pool.free(a_entity)
+
+License
+-------
+
+..  image:: https://www.gnu.org/graphics/lgplv3-147x51.png
+    :alt: LGPL-3.0
