@@ -47,7 +47,7 @@ Pool example
 
     arguments = (
         ((32, 32), {"visible": False}),
-        (640, None),
+        ((640,), None),
         # You can omit arguments for the third class or just None
     )
     
