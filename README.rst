@@ -15,6 +15,20 @@ Installation
 
     pip install toyblock
 
+API
+---
+
+*toyblock.Entity*
+.................
+
+
+It's just a bag for components to be used with *toyblock.System*.
+
+- *toyblock.Entity([_instance_, ...])*
+- *toyblock.Entity.add_component(_instance_)*
+- *toyblock.Entity.get_component(_type_of_instance_)*
+- *toyblock.Entity.del_component(_type_of_instance_)*
+
 Example usage
 -------------
 
