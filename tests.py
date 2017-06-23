@@ -132,3 +132,18 @@ class SystemTest(unittest.TestCase):
         self.assertFalse(one in system)
         self.assertTrue(two in system)
         
+    def test4_run_varargs(self):
+        
+        i = 2
+        
+        def update(system, entity, number):
+            a = entity.get_component(A)
+            a.a += number
+            
+        system = System(update)
+        entity = Entity(A())
+        system.add_entity(entity)
+        system.run(i)
+        a = entity.get_component(A)
+        self.assertEqual(a.a, 2)
+        

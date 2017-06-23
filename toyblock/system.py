@@ -13,6 +13,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from warnings import warn
+
 class System(object):
     """
     A bunch of entities by themselves are useless. You must add them
@@ -31,6 +33,8 @@ class System(object):
         from collections import deque
         self._callable_ = callable_
         self._entities = deque()
+        if len(args) or len(kwargs):
+            warn("Pass arguments to 'run' method instead.", DeprecationWarning, stacklevel=2)
         self._args = args
         self._kwargs = kwargs
         self._locked = False
@@ -55,14 +59,14 @@ class System(object):
         else:
             self._entities_remove(entity)
         
-    def run(self):
+    def run(self, *args, **kwargs):
         """Run the system. In the callable is perfectly safe add or remove entities
         to the system.
         """
         entities = self._entities
         callable_ = self._callable_
-        args = self._args
-        kwargs = self._kwargs
+        args = args if len(args) else self._args
+        kwargs = kwargs if len(kwargs) else self._kwargs
         self._locked = True
         for entity in entities:
             callable_(self, entity, *args, **kwargs)
