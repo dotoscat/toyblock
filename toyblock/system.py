@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from warnings import warn
+from collections import deque
 
 class System(object):
     """
@@ -30,7 +31,7 @@ class System(object):
     After you add at least one entity you can run the system anytime with the method *run()*
     """
     def __init__(self, callable_, *args, **kwargs):
-        from collections import deque
+        
         self._callable_ = callable_
         self._entities = deque()
         if len(args) or len(kwargs):
