@@ -13,6 +13,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from collections import OrderedDict
+
 class EntityError(Exception):
     pass
 
@@ -40,7 +42,7 @@ class Entity(object):
     """
     __slots__ = ('_components')
     def __init__(self, *instances):
-        self._components = {}
+        self._components = OrderedDict()
         add_component = self.add_component
         for instance in instances:
             add_component(instance)

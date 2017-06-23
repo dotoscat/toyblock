@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - You can pass variable arguments to System.run()
 
+### Changed
+
+- Entity components are stored in an ordered dictionary
+
 ### Deprecated
 
 - Assign variable arguments to System()
