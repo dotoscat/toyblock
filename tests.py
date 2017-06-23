@@ -49,6 +49,13 @@ class PoolTest(unittest.TestCase):
         self.assertEqual(one_d.v, 1)
         self.assertEqual(one_d.d, 7)
         self.assertEqual(one.get_component(A).a, 0)
+
+    def test6_single_args(self):
+        args = (
+            ((1,), None),
+        )
+        
+        pool = Pool(10, (D, A), args)
         
 
 class EntityTest(unittest.TestCase):
