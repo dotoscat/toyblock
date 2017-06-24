@@ -28,6 +28,25 @@ It's just a bag for components to be used with *toyblock.System*.
 - *toyblock.Entity.get_component(_type_of_instance_)*
 - *toyblock.Entity.del_component(_type_of_instance_)*
 
+*toyblock.System*
+.................
+
+Define the system behavior with *callable_*.
+
+*callable_* signature is *(system, entity, *args, **kwargs)*
+
+First you add entities to a system, then you call the system,
+passing any number of variables to the callable.
+
+- *toyblock.System(callable_, \*args, \*\*kwargs)* **deprecated**
+- *toyblock.System(callable_)*
+- *toyblock.System.add_entity(entity)*
+- *toyblock.System.remove_entity(entity)*
+- *toyblock.System.run(\*args, \*\*kwargs)* **deprecated**
+- *toyblock.System.__call__(\*args, \*\*kwargs)*
+- *toyblock.System.__contains__(entity)*
+- *toyblock.System.__len__()*
+
 *toyblock.Pool*
 ...............
 
@@ -75,18 +94,18 @@ Example usage
 
     entity = toyblock.Entity(A(), B()) #The order does not matter
             
-    def multiply_with_time(system, entity, time):
+    def multiply_with_time(system, entity, current_time):
         """This will be the callable for our system."""
         
         b = entity.get_component(B)
         a = entity.get_component(A)
-        b.b = a.x*2*time()
+        b.b = a.x*2*current_time
         if b.b > 3:
             system.remove_entity(entity)
         
-    main_system = toyblock.System(multiply_with_time, time)
+    main_system = toyblock.System(multiply_with_time)
     main_system.add_entity(entity)
-    main_system.run() #Run the system
+    main_system(time()) #Run, or call, the system
 
 License
 -------
