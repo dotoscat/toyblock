@@ -8,11 +8,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- You can pass variable arguments to System.run()
+- System instances are now callable.
+- You pass variables arguments when you call to system instances.
 
 ### Deprecated
 
-- Assign variable arguments to System()
+- Assign variable arguments to System().
+- System.run().
+
+### Fixed
+
+- Avoid possible recursion when you call a System instance.
 
 ## [2017-06-08] - 1.2.0
 

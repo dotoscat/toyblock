@@ -143,7 +143,7 @@ class SystemTest(unittest.TestCase):
         system = System(update)
         entity = Entity(A())
         system.add_entity(entity)
-        system.run(i)
+        system(i)
         a = entity.get_component(A)
         self.assertEqual(a.a, 2)
         
