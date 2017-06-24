@@ -42,7 +42,7 @@ class Entity(object):
     """
     __slots__ = ('_components')
     def __init__(self, *instances):
-        self._components = OrderedDict()
+        self._components = {}
         add_component = self.add_component
         for instance in instances:
             add_component(instance)
