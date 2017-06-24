@@ -107,6 +107,15 @@ Example usage
     main_system.add_entity(entity)
     main_system(time()) #Run, or call, the system
 
+Run rests
+---------
+
+At the project's root
+
+::
+    
+    python -m unittest
+
 License
 -------
 
