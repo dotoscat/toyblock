@@ -19,3 +19,8 @@ Entity = entity.Entity
 System = system.System
 
 __all__ = ["Pool", "Entity", "System"]
+
+def system(callable_):
+    if not callable(callable_):
+        raise TypeError("Pass a callable object to the decorator")
+    return System(callable_)

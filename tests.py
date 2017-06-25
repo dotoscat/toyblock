@@ -146,4 +146,3 @@ class SystemTest(unittest.TestCase):
         system(i)
         a = entity.get_component(A)
         self.assertEqual(a.a, 2)
-        
