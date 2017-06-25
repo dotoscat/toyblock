@@ -32,7 +32,7 @@ class System(object):
     
         The callable signature is (system, entity, *args, **kwargs).
     
-    After you add at least one entity you can run the system anytime with the method *run()*
+    After you add at least one entity you can run the system calling it*
     """
     def __init__(self, callable_):
         if not callable(callable_):
@@ -88,6 +88,20 @@ class System(object):
         return len(self._entities)
 
 def system(callable_):
+    """This is a decorator for System.
+    
+    Example of use:
+    
+    @toyblock.decorator
+    def physics(system, entity, dt):
+        # do your things here
+    
+    physics.add_entity(some_entity)
+    
+    # ...
+    
+    physics(get_delta_time())
+    """
     if not callable(callable_):
         raise TypeError("Use this as a DECORATOR")
     return System(callable_)

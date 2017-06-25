@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - System decorator
+- System constructor raises TypeError if a callable is not passed
 
 ### Changed
 
