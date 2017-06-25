@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+### Added
+
+- System decorator
+
+### Removed
+
+- Passing variable args to System constructor
+
 ## [2017-06-24] - 1.3.0
 
 ### Added

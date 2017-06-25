@@ -38,11 +38,9 @@ Define the system behavior with *callable_*.
 First you add entities to a system, then you call the system,
 passing any number of variables to the callable.
 
-- *toyblock.System(callable_, \*args, \*\*kwargs)* **deprecated**
 - *toyblock.System(callable_)*
 - *toyblock.System.add_entity(entity)*
 - *toyblock.System.remove_entity(entity)*
-- *toyblock.System.run(\*args, \*\*kwargs)* **deprecated**
 - *toyblock.System.__call__(\*args, \*\*kwargs)*
 - *toyblock.System.__contains__(entity)*
 - *toyblock.System.__len__()*

@@ -86,18 +86,16 @@ class SystemTest(unittest.TestCase):
     def setUp(self):
 
         def update(system, entity, random):
-            self.assertEqual(random, "Hello world!")
+            self.assertEqual(random, "Hello!")
             a = entity.get_component(A)
             b = entity.get_component(B)
             b.b += 1
             a.a = b.b*2
             a.system = system
         
-        random = "Hello world!"
+        self.hello = "Hello!"        
+        self.system = System(update)
         
-        self.system = System(update, random)
-        self.entities = [Entity() for i in range(100)]
-
     def _add_entities_to_system(self):
         for entity in self.entities:
             entity.add_component(A())
@@ -105,6 +103,7 @@ class SystemTest(unittest.TestCase):
             self.system.add_entity(entity)
         
     def test1_add_entities(self):
+        self.entities = [Entity() for i in range(100)]
         self._add_entities_to_system()
         self.assertEqual(len(self.system._entities), 100)
 
@@ -113,7 +112,7 @@ class SystemTest(unittest.TestCase):
         entity.add_component(A())
         entity.add_component(B())
         self.system.add_entity(entity)
-        self.system.run()
+        self.system(self.hello)
         self.assertEqual(entity.get_component(A).a, 2)
         self.assertEqual(entity.get_component(A).system, self.system)
         
@@ -126,9 +125,9 @@ class SystemTest(unittest.TestCase):
             system.add_entity(two)
             self.assertFalse(two in entity)
     
-        system = System(do_something, two)
+        system = System(do_something)
         system.add_entity(one)
-        system.run()
+        system(two)
         self.assertFalse(one in system)
         self.assertTrue(two in system)
         

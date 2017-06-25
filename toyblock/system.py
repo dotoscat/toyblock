@@ -13,7 +13,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from warnings import warn
 from collections import deque
 
 class System(object):
@@ -30,14 +29,10 @@ class System(object):
     
     After you add at least one entity you can run the system anytime with the method *run()*
     """
-    def __init__(self, callable_, *args, **kwargs):
+    def __init__(self, callable_):
         
         self._callable_ = callable_
         self._entities = deque()
-        if len(args) or len(kwargs):
-            warn("The system is callable. Pass the arguments when you call to this system instead.", DeprecationWarning, stacklevel=2)
-        self._args = args
-        self._kwargs = kwargs
         self._locked = False
         self._entities_removed = deque()
         self._entities_added = deque()
@@ -59,11 +54,7 @@ class System(object):
             self._entities_removed_append(entity)
         else:
             self._entities_remove(entity)
-    
-    def run(self, *args, **kwargs):
-        warn("The system is callable. 'run()' is deprecated.", DeprecationWarning, stacklevel=2)
-        self.__call__(*args, **kwargs)
-    
+        
     def __call__(self, *args, **kwargs):
         """Run the system. In the callable is perfectly safe add or remove entities
         to the system.
@@ -71,8 +62,6 @@ class System(object):
         if self._locked: return
         entities = self._entities
         callable_ = self._callable_
-        args = args if len(args) else self._args
-        kwargs = kwargs if len(kwargs) else self._kwargs
         self._locked = True
         for entity in entities:
             callable_(self, entity, *args, **kwargs)
