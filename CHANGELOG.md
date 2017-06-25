@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - System decorator
 - System constructor raises TypeError if a callable is not passed
+- pool property to Entity
 
 ### Changed
 

@@ -16,6 +16,7 @@
 __all__ = ["Pool", "Entity", "System"]
 
 from collections import deque
+from weakref import proxy
 
 class EntityError(Exception):
     pass
@@ -42,8 +43,14 @@ class Entity(object):
     `Entity(MyBody(x, y), CoolGraphics())`
     
     """
-    __slots__ = ('_components')
-    def __init__(self, *instances):
+    __slots__ = ('_components', '_pool')
+    
+    @property
+    def pool(self):
+        return self._pool
+    
+    def __init__(self, *instances, pool=None):
+        self._pool = pool
         self._components = {}
         add_component = self.add_component
         for instance in instances:
@@ -164,8 +171,6 @@ class Pool(object):
     """
     A Pool is used for cache created objects and increase performance.
     """
-    __slots__ = ("_avaliable", "_used", "_avaliable_pop",
-        "_used_append", "_used_remove", "_avaliable_append")
     def __init__(self, maxlen, types, args_for_types=()):
         """
         Parameters:
@@ -202,7 +207,7 @@ class Pool(object):
         EMPTY_DICT = {}
         EMPTY_ARGS = (None, None)
         for i in range(maxlen):
-            entity = Entity()
+            entity = Entity(pool=proxy(self))
             entity_add_component = entity.add_component
             for pair in zip_longest(types, args_for_types):
                 type_, type_args = pair

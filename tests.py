@@ -23,6 +23,7 @@ class PoolTest(unittest.TestCase):
     def test1_get(self):
         unique = Pool(2, (A,))
         instance = unique.get()
+        self.assertEqual(instance.pool, unique)
         self.assertEqual(isinstance(instance, Entity), True)
 
     def test2_empty(self):
