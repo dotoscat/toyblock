@@ -1,7 +1,6 @@
 import unittest
 from toyblock import Pool, Entity, System
 import toyblock.entity
-import toyblock.system
 
 class A(object):
     def __init__(self):

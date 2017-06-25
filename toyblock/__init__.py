@@ -13,12 +13,79 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from . import pool, entity, system
+__all__ = ["Pool", "Entity", "System"]
+
+from collections import deque
+from . import pool, entity
 Pool = pool.Pool
 Entity = entity.Entity
-System = system.System
 
-__all__ = ["Pool", "Entity", "System"]
+class System(object):
+    """
+    A bunch of entities by themselves are useless. You must add them
+    to a system, then interact with them.
+    
+    In the constructor is mandatory pass a callable. You can pass other arguments
+    that will passed to the callable for each entity.
+    
+    .. note::
+    
+        The callable signature is (system, entity, *args, **kwargs).
+    
+    After you add at least one entity you can run the system anytime with the method *run()*
+    """
+    def __init__(self, callable_):
+        
+        self._callable_ = callable_
+        self._entities = deque()
+        self._locked = False
+        self._entities_removed = deque()
+        self._entities_added = deque()
+        
+        #Remap some methods
+        self._entities_added_append = self._entities_added.append
+        self._entities_append = self._entities.append
+        self._entities_removed_append = self._entities_removed.append
+        self._entities_remove = self._entities.remove
+                
+    def add_entity(self, entity):
+        if self._locked:
+            self._entities_added_append(entity)
+        else:
+            self._entities_append(entity)
+
+    def remove_entity(self, entity):
+        if self._locked:
+            self._entities_removed_append(entity)
+        else:
+            self._entities_remove(entity)
+        
+    def __call__(self, *args, **kwargs):
+        """Run the system. In the callable is perfectly safe add or remove entities
+        to the system.
+        """
+        if self._locked: return
+        entities = self._entities
+        callable_ = self._callable_
+        self._locked = True
+        for entity in entities:
+            callable_(self, entity, *args, **kwargs)
+        self._locked = False
+        entities_removed = self._entities_removed
+        entities_added = self._entities_added
+        while len(entities_removed):
+            entity = entities_removed.pop()
+            entities.remove(entity)
+        while len(entities_added):
+            entity = entities_added.pop()
+            entities.append(entity)
+            
+    def __contains__(self, entity):
+        return entity in self._entities
+
+    def __len__(self):
+        return len(self._entities)
+
 
 def system(callable_):
     if not callable(callable_):
