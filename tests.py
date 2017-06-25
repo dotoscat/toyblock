@@ -144,3 +144,13 @@ class SystemTest(unittest.TestCase):
         system(i)
         a = entity.get_component(A)
         self.assertEqual(a.a, 2)
+
+    def test5_decorator(self):
+        
+        @toyblock.system
+        def print_entity(system, entity):
+            print(entity)
+        
+        print_entity.add_entity(Entity())
+        print_entity()
+        

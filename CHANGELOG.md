@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - System decorator
 
+### Changed
+
+- System constructor raises a TypeError exception if a callable is not
+passed
+
 ### Removed
 
 - Passing variable args to System constructor

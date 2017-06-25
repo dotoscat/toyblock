@@ -35,7 +35,8 @@ class System(object):
     After you add at least one entity you can run the system anytime with the method *run()*
     """
     def __init__(self, callable_):
-        
+        if not callable(callable_):
+            raise TypeError("Pass a callable object to the constructor")
         self._callable_ = callable_
         self._entities = deque()
         self._locked = False
@@ -86,8 +87,7 @@ class System(object):
     def __len__(self):
         return len(self._entities)
 
-
 def system(callable_):
     if not callable(callable_):
-        raise TypeError("Pass a callable object to the decorator")
+        raise TypeError("Use this as a DECORATOR")
     return System(callable_)
