@@ -1,6 +1,6 @@
 import unittest
-from toyblock import Pool, Entity, System
-import toyblock.entity
+import toyblock
+from toyblock import Entity, Pool, System
 
 class A(object):
     def __init__(self):
@@ -73,7 +73,7 @@ class EntityTest(unittest.TestCase):
 
     def test3_EntityComponentExistsError(self):
         self.entity.add_component(self.a)
-        self.assertRaises(toyblock.entity.EntityComponentExistsError,
+        self.assertRaises(toyblock.EntityComponentExistsError,
                           self.entity.add_component, A())
     
     def test4_entity_creation_with_components(self):
