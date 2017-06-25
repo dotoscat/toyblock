@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 
 - Passing variable args to System constructor
+- Systen.run()
 
 ## [2017-06-24] - 1.3.0
 
