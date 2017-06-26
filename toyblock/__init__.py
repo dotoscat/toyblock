@@ -181,7 +181,7 @@ class Pool(object):
     """
     A Pool is used for cache created objects and increase performance.
     """
-    def __init__(self, maxlen, types, args_for_types=()):
+    def __init__(self, maxlen, types, args_list=(), kwargs_list=()):
         """
         Parameters:
         
@@ -206,20 +206,20 @@ class Pool(object):
         
         pool = toyblock.Pool(10, (A, B, C), arguments)
         
+        args = ((1, 2),)
+        kwargs = (None, {"a": 7})
+        pool = toyblock.Pool(10, (A, B, C), args, kwargs)
         """
         self._avaliable = deque(maxlen=maxlen)
         avaliable_append = self._avaliable.append
         EMPTY_TUPLE = ()
         EMPTY_DICT = {}
-        EMPTY_ARGS = (None, None)
         for i in range(maxlen):
             entity = Entity(pool=proxy(self))
             entity_add_component = entity.add_component
-            for pair in zip_longest(types, args_for_types):
-                type_, type_args = pair
-                args, kwargs = EMPTY_ARGS if type_args is None else type_args
-                args = EMPTY_TUPLE if args is None else args
-                kwargs = EMPTY_DICT if kwargs is None else kwargs
+            for type_, type_args, type_kwargs in zip_longest(types, args_list, kwargs_list):
+                args = EMPTY_TUPLE if type_args is None else type_args
+                kwargs = EMPTY_DICT if type_kwargs is None else type_kwargs
                 instance = type_(*args, **kwargs)
                 entity_add_component(instance)
             avaliable_append(entity)

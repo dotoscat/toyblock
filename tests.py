@@ -36,14 +36,9 @@ class PoolTest(unittest.TestCase):
         pool.free(instance)
         
     def test5_var_args(self):
-        
-        args = (
-            None,
-            ((1,), {'d': 7}),
-            None
-        )
-        
-        pool = Pool(1000, (A, D, C), args)
+        args = (None, (1,), None)
+        kwargs = (None, {'d': 7})
+        pool = Pool(1000, (A, D, C), args, kwargs)
         one = pool.get()
         one_d = one.get_component(D)
         self.assertEqual(one_d.v, 1)

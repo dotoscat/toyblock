@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - System constructor raises a TypeError exception if a callable is not
 passed.
+- Pool accepts one list for variables args and another one for keywords args.
 
 ### Deprecated
 
