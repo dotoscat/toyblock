@@ -18,6 +18,10 @@ __all__ = ["Pool", "Entity", "System"]
 from collections import deque
 from weakref import proxy
 import warnings
+try:
+    from itertools import zip_longest
+except:
+    from itertools import izip_longest as zip_longest
 
 class EntityError(Exception):
     pass
@@ -202,10 +206,6 @@ class Pool(object):
         pool = toyblock.Pool(10, (A, B, C), arguments)
         
         """
-        try:
-            from itertools import zip_longest
-        except:
-            from itertools import izip_longest as zip_longest
         self._avaliable = deque(maxlen=maxlen)
         avaliable_append = self._avaliable.append
         EMPTY_TUPLE = ()
