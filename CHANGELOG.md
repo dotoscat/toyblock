@@ -11,11 +11,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - System decorator
 - System constructor raises TypeError if a callable is not passed
 - pool property to Entity
+- free() to Entity
 
 ### Changed
 
 - System constructor raises a TypeError exception if a callable is not
 passed
+
+### Deprecated
+
+- Pool.free(). Use Entity.free() instead.
 
 ### Removed
 

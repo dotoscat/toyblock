@@ -33,7 +33,7 @@ class PoolTest(unittest.TestCase):
     def test3_free(self):
         pool = Pool(3, (A,))
         instance = pool.get()
-        self.assertTrue(pool.free(instance))
+        pool.free(instance)
         
     def test5_var_args(self):
         

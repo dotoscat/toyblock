@@ -17,6 +17,7 @@ __all__ = ["Pool", "Entity", "System"]
 
 from collections import deque
 from weakref import proxy
+import warnings
 
 class EntityError(Exception):
     pass
@@ -76,6 +77,10 @@ class Entity(object):
         Return the deleted component(instance), None if not exists.
         """
         return self._components.pop(type_, None)
+    
+    def free(self):
+        if self._pool is None: return
+        self._pool._free(self)
     
     def __contains__(self, item):
         return item in self._components
@@ -235,12 +240,11 @@ class Pool(object):
         return element
 
     def free(self, element):
-        """Mark the instance to be avaliable and return True.
+        warnings.warn("Use Entity.free() instead", DeprecationWarning, stacklevel=2)
+        self._free(element)
 
-        Return False if it do not belong to the pool or is not used yet.
-        """
-        if element not in self._used:
-            return False
+    def _free(self, element):
+        """Mark the instance to be avaliable."""
+        if element not in self._used: return
         self._used.remove(element)
         self._avaliable.append(element)
-        return True
