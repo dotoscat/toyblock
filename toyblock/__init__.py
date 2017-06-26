@@ -163,7 +163,7 @@ def system(callable_):
     
     Example of use:
     
-    @toyblock.decorator
+    @toyblock.system
     def physics(system, entity, dt):
         # do your things here
     
