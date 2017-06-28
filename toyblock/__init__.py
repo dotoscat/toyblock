@@ -191,21 +191,7 @@ class Pool(object):
         [(args, kwargs), ...]
         
         Example of use
-        
-        arguments = (
-            (
-                (1, 2),
-                None
-            ),
-            (
-                None,
-                {"a": 7}
-            ),
-            None
-        )
-        
-        pool = toyblock.Pool(10, (A, B, C), arguments)
-        
+                
         args = ((1, 2),)
         kwargs = (None, {"a": 7})
         pool = toyblock.Pool(10, (A, B, C), args, kwargs)
