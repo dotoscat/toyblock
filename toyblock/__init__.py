@@ -38,6 +38,14 @@ class EntityComponentExistsError(EntityError):
     def __str__(self):
         return "Component {} already exists in entity {}".format(self.class_, self.entity)
 
+class EntityBelongsToPoolError(EntityError):
+    """This is raised when the entity belongs to a Pool"""
+    def __init__(self, entity):
+        self.entity = entity
+
+    def __str__(self):
+        return "{} belongs to {}",format(entity, entity.pool)
+
 class Entity(object):
     """Entity use the type of the instances used as components as key
     for the instance.
@@ -49,7 +57,7 @@ class Entity(object):
     `Entity(MyBody(x, y), CoolGraphics())`
     
     """
-    __slots__ = ('_components', '_pool')
+    __slots__ = ('_components', '_pool', '_systems')
     
     @property
     def pool(self):
@@ -61,12 +69,14 @@ class Entity(object):
         add_component = self.add_component
         for instance in instances:
             add_component(instance)
+        self._systems = set()
 
     def add_component(self, instance):
         """Add a component instance to this entity.
         
         It raises 'EntityComponentExistsError' if the type of instance is already used.
         """
+        if self._pool is not None: raise EntityBelongsToPoolError(self)
         type_ = type(instance)
         if type_ in self._components:
             raise EntityComponentExistsError(type_, self)
@@ -74,6 +84,7 @@ class Entity(object):
 
     def get_component(self, type_):
         """Get a specific component."""
+        if self._pool is not None: raise EntityBelongsToPoolError(self)
         return self._components.get(type_)
 
     def del_component(self, type_):
@@ -81,6 +92,7 @@ class Entity(object):
 
         Return the deleted component(instance), None if not exists.
         """
+        if self._pool is not None: raise EntityBelongsToPoolError(self)
         return self._components.pop(type_, None)
     
     def free(self):
