@@ -71,6 +71,9 @@ class Entity(object):
             add_component(instance)
         self._systems = set()
 
+    def _add_system(self, system):
+        self._systems.add(system)
+
     def add_component(self, instance):
         """Add a component instance to this entity.
         
@@ -100,8 +103,8 @@ class Entity(object):
         self._pool._free(self)
     
     def __contains__(self, item):
+        if isinstance(item, System): return item in self._systems
         return item in self._components
-
 
 class System(object):
     """
@@ -131,12 +134,13 @@ class System(object):
         self._entities_append = self._entities.append
         self._entities_removed_append = self._entities_removed.append
         self._entities_remove = self._entities.remove
-                
+
     def add_entity(self, entity):
         if self._locked:
             self._entities_added_append(entity)
         else:
             self._entities_append(entity)
+            entity._add_system(proxy(self))
 
     def remove_entity(self, entity):
         if self._locked:
@@ -163,9 +167,10 @@ class System(object):
         while len(entities_added):
             entity = entities_added.pop()
             entities.append(entity)
+            entity._add_system(proxy(self))
             
     def __contains__(self, entity):
-        return entity in self._entities
+        return self in entity
 
     def __len__(self):
         return len(self._entities)
