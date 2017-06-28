@@ -74,6 +74,9 @@ class Entity(object):
     def _add_system(self, system):
         self._systems.add(system)
 
+    def _remove_system(self, system):
+        self._systems.remove(system)
+
     def add_component(self, instance):
         """Add a component instance to this entity.
         
@@ -136,6 +139,7 @@ class System(object):
         self._entities_remove = self._entities.remove
 
     def add_entity(self, entity):
+        if self in entity: return
         if self._locked:
             self._entities_added_append(entity)
         else:
@@ -143,10 +147,12 @@ class System(object):
             entity._add_system(proxy(self))
 
     def remove_entity(self, entity):
+        if self not in entity: return
         if self._locked:
             self._entities_removed_append(entity)
         else:
             self._entities_remove(entity)
+            entity._remove_system(self)
         
     def __call__(self, *args, **kwargs):
         """Run the system. In the callable is perfectly safe add or remove entities
@@ -164,6 +170,7 @@ class System(object):
         while len(entities_removed):
             entity = entities_removed.pop()
             entities.remove(entity)
+            entity._remove_system(self)
         while len(entities_added):
             entity = entities_added.pop()
             entities.append(entity)

@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - System constructor raises TypeError if a callable is not passed
 - pool property to Entity
 - free() to Entity
+- Check if a System is in Entity 
 
 ### Changed
 
