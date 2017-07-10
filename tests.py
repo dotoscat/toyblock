@@ -51,7 +51,26 @@ class PoolTest(unittest.TestCase):
         )
         
         pool = Pool(10, (D, A), args)
+    
+    def test7_system_management(self):
         
+        @toyblock.system
+        def system_a(system, entity):
+            print("I am A", entity, entity.pool)
+
+        @toyblock.system
+        def system_b(system, entity):
+            print("I am B", entity, entity.pool)
+
+        pool = toyblock.Pool(3, (A, B), systems=(system_a, system_b))
+        system_a()
+        system_b()
+        uno = pool.get()
+        system_a()
+        system_b()
+        uno.free()
+        system_a()
+        system_b()
 
 class EntityTest(unittest.TestCase):
     def setUp(self):
