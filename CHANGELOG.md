@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - free() to Entity
 - Check if a System is in Entity
 - Private add_entity to Entity 
+- Pass systems to Pool to automatically add or remove an instance to them
+when you get or release an instance.
 
 ### Changed
 

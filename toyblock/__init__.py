@@ -251,17 +251,21 @@ class Pool(object):
             return None
         entity = self._avaliable_pop()
         self._used_append(entity)
-        if self._systems is not None:
-            for system in self._systems:
-                system.add_entity(entity)
+        if self._systems is None:
+            return entity
+        for system in self._systems:
+            system.add_entity(entity)
         return entity
 
-    def free(self, element):
+    def free(self, entity):
         warnings.warn("Use Entity.free() instead", DeprecationWarning, stacklevel=2)
-        self._free(element)
+        self._free(entity)
 
-    def _free(self, element):
+    def _free(self, entity):
         """Mark the instance to be avaliable."""
-        if element not in self._used: return
-        self._used.remove(element)
-        self._avaliable.append(element)
+        if entity not in self._used: return
+        self._used.remove(entity)
+        self._avaliable.append(entity)
+        if self._systems is None: return
+        for system in self._systems:
+            system.remove_entity(entity)
