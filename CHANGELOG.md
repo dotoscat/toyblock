@@ -12,13 +12,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - System constructor raises TypeError if a callable is not passed
 - pool property to Entity
 - free() to Entity
-- Check if a System is in Entity 
+- Check if a System is in Entity
+- Private add_entity to Entity 
 
 ### Changed
 
 - System constructor raises a TypeError exception if a callable is not
 passed.
 - Pool accepts one list for variables args and another one for keywords args.
+- Entity systems are stored in deque
 
 ### Deprecated
 
@@ -28,6 +30,11 @@ passed.
 
 - Passing variable args to System constructor
 - Systen.run()
+- Entity get_component raises an error if belongs to a pool
+
+### Fix
+
+- Missing string for exception EntityBelongsToPoolError
 
 ## [2017-06-24] - 1.3.0
 

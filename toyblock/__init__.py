@@ -44,7 +44,7 @@ class EntityBelongsToPoolError(EntityError):
         self.entity = entity
 
     def __str__(self):
-        return "{} belongs to {}",format(entity, entity.pool)
+        return "{} belongs to {}".format(self.entity, self.entity.pool)
 
 class Entity(object):
     """Entity use the type of the instances used as components as key
@@ -69,13 +69,19 @@ class Entity(object):
         add_component = self.add_component
         for instance in instances:
             add_component(instance)
-        self._systems = set()
+        self._systems = deque()
 
     def _add_system(self, system):
-        self._systems.add(system)
+        self._systems.append(system)
 
     def _remove_system(self, system):
         self._systems.remove(system)
+
+    def _add_component(self, instance):
+        type_ = type(instance)
+        if type_ in self._components:
+            raise EntityComponentExistsError(type_, self)
+        self._components[type_] = instance
 
     def add_component(self, instance):
         """Add a component instance to this entity.
@@ -83,14 +89,10 @@ class Entity(object):
         It raises 'EntityComponentExistsError' if the type of instance is already used.
         """
         if self._pool is not None: raise EntityBelongsToPoolError(self)
-        type_ = type(instance)
-        if type_ in self._components:
-            raise EntityComponentExistsError(type_, self)
-        self._components[type_] = instance
+        self._add_component(instance)
 
     def get_component(self, type_):
         """Get a specific component."""
-        if self._pool is not None: raise EntityBelongsToPoolError(self)
         return self._components.get(type_)
 
     def del_component(self, type_):
@@ -226,7 +228,7 @@ class Pool(object):
         EMPTY_DICT = {}
         for i in range(maxlen):
             entity = Entity(pool=proxy(self))
-            entity_add_component = entity.add_component
+            entity_add_component = entity._add_component
             for type_, type_args, type_kwargs in zip_longest(types, args_list, kwargs_list):
                 args = EMPTY_TUPLE if type_args is None else type_args
                 kwargs = EMPTY_DICT if type_kwargs is None else type_kwargs
