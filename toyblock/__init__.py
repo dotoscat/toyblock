@@ -207,7 +207,7 @@ class Pool(object):
     """
     A Pool is used for cache created objects and increase performance.
     """
-    def __init__(self, maxlen, types, args_list=(), kwargs_list=()):
+    def __init__(self, maxlen, types, args_list=(), kwargs_list=(), systems=None):
         """
         Parameters:
         
@@ -222,6 +222,7 @@ class Pool(object):
         kwargs = (None, {"a": 7})
         pool = toyblock.Pool(10, (A, B, C), args, kwargs)
         """
+        self._systems = systems
         self._avaliable = deque(maxlen=maxlen)
         avaliable_append = self._avaliable.append
         EMPTY_TUPLE = ()
@@ -244,13 +245,16 @@ class Pool(object):
         self._avaliable_append = self._avaliable.append
 
     def get(self):
-        """Return a free instance if avaliable, None otherwise.
+        """Return a free Entity if avaliable, None otherwise.
         """
         if not self._avaliable:
             return None
-        element = self._avaliable_pop()
-        self._used_append(element)
-        return element
+        entity = self._avaliable_pop()
+        self._used_append(entity)
+        if self._systems is not None:
+            for system in self._systems:
+                system.add_entity(entity)
+        return entity
 
     def free(self, element):
         warnings.warn("Use Entity.free() instead", DeprecationWarning, stacklevel=2)
