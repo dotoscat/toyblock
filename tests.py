@@ -99,7 +99,8 @@ class EntityTest(unittest.TestCase):
 class SystemTest(unittest.TestCase):
     def setUp(self):
 
-        def update(system, entity, random):
+        @toyblock.system
+        def system(system, entity, random):
             self.assertEqual(random, "Hello!")
             a = entity.get_component(A)
             b = entity.get_component(B)
@@ -107,8 +108,8 @@ class SystemTest(unittest.TestCase):
             a.a = b.b*2
             a.system = system
         
+        self.system = system
         self.hello = "Hello!"        
-        self.system = System(update)
         
     def _add_entities_to_system(self):
         for entity in self.entities:
@@ -134,12 +135,12 @@ class SystemTest(unittest.TestCase):
         one = Entity()
         two = Entity()
     
-        def do_something(system, entity, two):
+        @toyblock.system
+        def system(system, entity, two):
             system.remove_entity(entity)
             system.add_entity(two)
             self.assertFalse(two in entity)
     
-        system = System(do_something)
         system.add_entity(one)
         system(two)
         self.assertFalse(one in system)
@@ -149,11 +150,11 @@ class SystemTest(unittest.TestCase):
         
         i = 2
         
-        def update(system, entity, number):
+        @toyblock.system
+        def system(system, entity, number):
             a = entity.get_component(A)
             a.a += number
             
-        system = System(update)
         entity = Entity(A())
         system.add_entity(entity)
         system(i)
