@@ -72,6 +72,30 @@ class PoolTest(unittest.TestCase):
         system_a()
         system_b()
 
+    def test8_entity_init(self):
+        
+        class One:
+            def __init__(self):
+                self.a = 0
+                self.b = 0
+        
+        @toyblock.system
+        def system(system, entity):
+            one = entity.get_component(One)
+            self.assertEqual(one.a, 7)
+            self.assertEqual(one.b, 12)
+            
+        pool = toyblock.Pool(10, (One,), systems=(system,))
+        
+        @pool.init
+        def init_one(entity):
+            one = entity.get_component(One)
+            one.a = 7
+            one.b = 12
+            
+        pool.get()
+        system()
+
 class EntityTest(unittest.TestCase):
     def setUp(self):
         self.a = A()

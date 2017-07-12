@@ -222,6 +222,7 @@ class Pool(object):
         kwargs = (None, {"a": 7})
         pool = toyblock.Pool(10, (A, B, C), args, kwargs)
         """
+        self._init = None
         self._systems = systems
         self._avaliable = deque(maxlen=maxlen)
         avaliable_append = self._avaliable.append
@@ -244,6 +245,12 @@ class Pool(object):
         self._used_remove = self._used.remove
         self._avaliable_append = self._avaliable.append
 
+    def init(self, init):
+        if not callable(init):
+            raise TypeError("Use this as a DECORATOR")
+        self._init = init
+        return init
+
     def get(self):
         """Return a free Entity if avaliable, None otherwise.
         """
@@ -251,6 +258,8 @@ class Pool(object):
             return None
         entity = self._avaliable_pop()
         self._used_append(entity)
+        if self._init is not None:
+            self._init(entity)
         if self._systems is None:
             return entity
         for system in self._systems:
