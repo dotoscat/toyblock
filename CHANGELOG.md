@@ -16,7 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Private add_entity to Entity 
 - Pass systems to Pool to automatically add or remove an instance to them
 when you get or release an instance.
-- Pool.init decorator to be used along with Pool.get 
+- Pool.init decorator to be used along with Pool.get
+- Pool.clean decorator to be used along with Entity.free 
 
 ### Changed
 

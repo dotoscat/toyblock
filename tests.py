@@ -96,6 +96,33 @@ class PoolTest(unittest.TestCase):
         pool.get()
         system()
 
+    def test9_entity_clean(self):
+        
+        class Accumulator:
+            def __init__(self):
+                self.step = 0
+                
+        @toyblock.system
+        def accumulate(system, entity):
+            accu = entity.get_component(Accumulator)
+            accu.step += 1
+
+        pool = toyblock.Pool(4, (Accumulator,), systems=(accumulate,))
+        @pool.init
+        def init(entity):
+            accu = entity.get_component(Accumulator)
+            accu.step += 1
+        @pool.clean
+        def clean(entity):
+            accu = entity.get_component(Accumulator)
+            accu.step += 1
+
+        entity = pool.get()
+        accumulate()
+        entity.free()
+        accu = entity.get_component(Accumulator)
+        self.assertEqual(accu.step, 3)
+
 class EntityTest(unittest.TestCase):
     def setUp(self):
         self.a = A()
