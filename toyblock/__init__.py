@@ -91,9 +91,12 @@ class Entity(object):
         if self._pool is not None: raise EntityBelongsToPoolError(self)
         self._add_component(instance)
 
-    def get_component(self, type_):
-        """Get a specific component."""
+    def __getitem__(self, type_):
         return self._components.get(type_)
+
+    def get_component(self, type_):
+        warnings.warn("Use [type_] instead", DeprecationWarning, stacklevel=2)
+        return self.__getitem__(type_)
 
     def del_component(self, type_):
         """Delete a specific component.

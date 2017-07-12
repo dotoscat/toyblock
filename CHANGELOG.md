@@ -17,7 +17,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Pass systems to Pool to automatically add or remove an instance to them
 when you get or release an instance.
 - Pool.init decorator to be used along with Pool.get
-- Pool.clean decorator to be used along with Entity.free 
+- Pool.clean decorator to be used along with Entity.free
+- Entity\[type_\].
 
 ### Changed
 
@@ -29,6 +30,7 @@ passed.
 ### Deprecated
 
 - Pool.free(). Use Entity.free() instead.
+- Entity.get_component(). Use Entity\[type_\] instead.
 
 ### Removed
 

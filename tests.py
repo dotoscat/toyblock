@@ -40,10 +40,10 @@ class PoolTest(unittest.TestCase):
         kwargs = (None, {'d': 7})
         pool = Pool(1000, (A, D, C), args, kwargs)
         one = pool.get()
-        one_d = one.get_component(D)
+        one_d = one[D]
         self.assertEqual(one_d.v, 1)
         self.assertEqual(one_d.d, 7)
-        self.assertEqual(one.get_component(A).a, 0)
+        self.assertEqual(one[A].a, 0)
 
     def test6_single_args(self):
         args = (
@@ -81,7 +81,7 @@ class PoolTest(unittest.TestCase):
         
         @toyblock.system
         def system(system, entity):
-            one = entity.get_component(One)
+            one = entity[One]
             self.assertEqual(one.a, 7)
             self.assertEqual(one.b, 12)
             
@@ -89,7 +89,7 @@ class PoolTest(unittest.TestCase):
         
         @pool.init
         def init_one(entity):
-            one = entity.get_component(One)
+            one = entity[One]
             one.a = 7
             one.b = 12
             
@@ -104,23 +104,23 @@ class PoolTest(unittest.TestCase):
                 
         @toyblock.system
         def accumulate(system, entity):
-            accu = entity.get_component(Accumulator)
+            accu = entity[Accumulator]
             accu.step += 1
 
         pool = toyblock.Pool(4, (Accumulator,), systems=(accumulate,))
         @pool.init
         def init(entity):
-            accu = entity.get_component(Accumulator)
+            accu = entity[Accumulator]
             accu.step += 1
         @pool.clean
         def clean(entity):
-            accu = entity.get_component(Accumulator)
+            accu = entity[Accumulator]
             accu.step += 1
 
         entity = pool.get()
         accumulate()
         entity.free()
-        accu = entity.get_component(Accumulator)
+        accu = entity[Accumulator]
         self.assertEqual(accu.step, 3)
 
 class EntityTest(unittest.TestCase):
@@ -135,7 +135,7 @@ class EntityTest(unittest.TestCase):
         
     def test2_get_component(self):
         self.entity.add_component(self.a)
-        self.assertEqual(self.entity.get_component(A), self.a)
+        self.assertEqual(self.entity[A], self.a)
 
     def test3_EntityComponentExistsError(self):
         self.entity.add_component(self.a)
@@ -144,8 +144,8 @@ class EntityTest(unittest.TestCase):
     
     def test4_entity_creation_with_components(self):
         entity = Entity(self.a, self.b)
-        self.assertEqual(entity.get_component(A), self.a)
-        self.assertEqual(entity.get_component(B), self.b)
+        self.assertEqual(entity[A], self.a)
+        self.assertEqual(entity[B], self.b)
 
 class SystemTest(unittest.TestCase):
     def setUp(self):
@@ -153,8 +153,8 @@ class SystemTest(unittest.TestCase):
         @toyblock.system
         def system(system, entity, random):
             self.assertEqual(random, "Hello!")
-            a = entity.get_component(A)
-            b = entity.get_component(B)
+            a = entity[A]
+            b = entity[B]
             b.b += 1
             a.a = b.b*2
             a.system = system
@@ -179,8 +179,8 @@ class SystemTest(unittest.TestCase):
         entity.add_component(B())
         self.system.add_entity(entity)
         self.system(self.hello)
-        self.assertEqual(entity.get_component(A).a, 2)
-        self.assertEqual(entity.get_component(A).system, self.system)
+        self.assertEqual(entity[A].a, 2)
+        self.assertEqual(entity[A].system, self.system)
         
     def test3_manipulate_entities(self):
         one = Entity()
@@ -203,13 +203,13 @@ class SystemTest(unittest.TestCase):
         
         @toyblock.system
         def system(system, entity, number):
-            a = entity.get_component(A)
+            a = entity[A]
             a.a += number
             
         entity = Entity(A())
         system.add_entity(entity)
         system(i)
-        a = entity.get_component(A)
+        a = entity[A]
         self.assertEqual(a.a, 2)
 
     def test5_decorator(self):
