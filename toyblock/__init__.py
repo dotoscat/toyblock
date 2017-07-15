@@ -280,6 +280,10 @@ class Pool(object):
         warnings.warn("Use Entity.free() instead", DeprecationWarning, stacklevel=2)
         self._free(entity)
 
+    def free_all(self):
+        while len(self._used):
+            self._free(self._used[0])
+
     def _free(self, entity):
         """Mark the instance to be avaliable."""
         if entity not in self._used: return

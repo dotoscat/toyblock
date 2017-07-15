@@ -123,6 +123,20 @@ class PoolTest(unittest.TestCase):
         accu = entity[Accumulator]
         self.assertEqual(accu.step, 3)
 
+    def test10_free_all(self):
+        class Times:
+            times = 0
+            
+        pool = toyblock.Pool(10, (A,))
+                
+        @pool.clean
+        def clean_object(entity):
+            Times.times += 1
+
+        for i in range(10): pool.get()
+        pool.free_all()
+        self.assertEqual(Times.times, 10)
+
 class EntityTest(unittest.TestCase):
     def setUp(self):
         self.a = A()
