@@ -19,6 +19,7 @@ when you get or release an instance.
 - Pool.init decorator to be used along with Pool.get
 - Pool.clean decorator to be used along with Entity.free
 - Entity\[type_\] for component access. Less verbose than get_component().
+- Pool.free_all
 
 ### Changed
 
