@@ -73,6 +73,7 @@ entity is freed.
 - *toyblock.Pool(number_of_entities, [type_list], [args_list], systems=[system_list])*
 - *toyblock.Pool.get()*
 - *toyblock.Pool.free(_entity_)* **Deprecated**
+- *toyblock.Pool.init(callable_)*
 
 Pool example
 ++++++++++++
@@ -84,10 +85,23 @@ Pool example
     my_systems = (physics, graphics)
 
     my_pool = toyblock.Pool(100, (Body, Jump, Graphics), args, kwargs, my_systems)
-    # You can omit 'arguments' too if the classes do not need any.
+    # You can omit 'args' and 'kwargs' if don't need any.
     a_entity = my_pool.get() # Automatically the entity will be added to the systems
     # ... More stuff
-    a_entity.free() # Automatically removed from the systems
+    a_entity.free() # Avaliable again from its pool and automatically removed from the systems
+
+@Pool.init
+++++++++++
+
+Each time when Pool's get is called this function will be called for the returned entity.
+
+::
+
+    a_pool = toyblock.Pool(4, (Body, Graphic))
+    @a_pool.init
+    def init_car(entity):
+        body = entity[Body]
+        body.vel = 0.0
 
 Toyblock example usage
 ----------------------
