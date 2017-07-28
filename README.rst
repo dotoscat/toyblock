@@ -172,7 +172,9 @@ Toyblock example usage
         graphic.update_position(body.x, body.y)
         canvas.draw(graphic)
 
-    bullets = Pool(100, (Body, Graphic), systems=(physics, collision, draw))
+    bullet_args = (None, (8, ), (bullet_sprite, bullet_animation))
+
+    bullets = Pool(100, (Body, Collision, Graphic), args=bullet_args, systems=(physics, collision, draw))
     @bullet.init
     def bullet_init(entity):
         entity[Graphic].animation.step = 0
