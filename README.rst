@@ -123,29 +123,67 @@ Toyblock example usage
     from time import time
     import toyblock
 
-    #Our components for the entity
-    class A:
+    #Our components for an entity 'bullet'
+    class Body:
         def __init__(self):
-            self.x = 1
+            self.x = 0.0
+            self.y = 0.0
+            self.vel_x = 0.0
+            self.vel_y = 0.0
 
-    class B:
-        def __init__(self):
-            self.b = 0
+        def update(dt):
+            # update
 
-    entity = toyblock.Entity(A(), B()) #The order does not matter
+    class Collision:
+        def __init__(self, radius):
+            self.x = 0.0
+            self.y = 0.0
+            self.radius = radius
+        def collides_with(another):
+            # return true or false
+        def update(x, y):
+            # update
 
-    def multiply_with_time(system, entity, current_time):
-        """This will be the callable for our system."""
+    class Graphic:
+        def __init__(self, sprite, animation):
+            self.sprite = sprite
+            self.animation = animation
 
-        b = entity.get_component(B)
-        a = entity.get_component(A)
-        b.b = a.x*2*current_time
-        if b.b > 3:
-            system.remove_entity(entity)
+        def update_position(x, y):
+            self.sprite.set_position(x, y)
 
-    main_system = toyblock.System(multiply_with_time)
-    main_system.add_entity(entity)
-    main_system(time()) #Run, or call, the system
+    @toyblock.system
+    def physics(system, entity, dt):
+        body = entity[Body]
+        body.update(dt)
+
+    @toyblock.system
+    def collision(system, entity, hero):
+        body = entity[Body]
+        collision = entity[Collision]
+        hero_collision = hero[Collision]
+        if collision.collides_with(hero_collision):
+            entity.free()
+
+    @toyblock.system
+    def draw(system, entity, canvas):
+        body = entity[Body]
+        graphic = entity[Graphic]
+        graphic.update_position(body.x, body.y)
+        canvas.draw(graphic)
+
+    bullets = Pool(100, (Body, Graphic), systems=(physics, collision, draw))
+    @bullet.init
+    def bullet_init(entity):
+        entity[Graphic].animation.step = 0
+
+    # .... More setup
+
+    while playing:
+        # Spawn bullets
+        physics(time())
+        collision(hero)
+        draw(canvas)
 
 Run tests
 ---------
