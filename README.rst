@@ -70,7 +70,7 @@ You provide args and kwargs for each one of the entity's component. You can add
 systems which entities will be added or removed from them automatically when a
 entity is freed.
 
-- *toyblock.Pool(number_of_entities, [type_list], [args_list], [system_list])*
+- *toyblock.Pool(number_of_entities, [type_list], [args_list], systems=[system_list])*
 - *toyblock.Pool.get()*
 - *toyblock.Pool.free(_entity_)* **Deprecated**
 
@@ -79,19 +79,18 @@ Pool example
 
 ::
 
-    arguments = (
-        ((32, 32), {"visible": False}),
-        ((640,), None),
-        # You can omit arguments for the third class or just None
-    )
+    args = ((32, 32), (640,))
+    kwargs = (None, None, {"visible": False})
+    my_systems = (physics, graphics)
 
-    my_pool = toyblock.Pool(100, (Body, Jump, Graphics), arguments)
+    my_pool = toyblock.Pool(100, (Body, Jump, Graphics), args, kwargs, my_systems)
     # You can omit 'arguments' too if the classes do not need any.
-    a_entity = my_pool.get()
-    my_pool.free(a_entity)
+    a_entity = my_pool.get() # Automatically the entity will be added to the systems
+    # ... More stuff
+    a_entity.free() # Automatically removed from the systems
 
-Example usage
--------------
+Toyblock example usage
+----------------------
 
 ::
 
