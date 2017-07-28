@@ -67,8 +67,8 @@ Toyblock provides you a convenient decorator for building a System
 
 A pool of entities that helps you to cache the entities and manage them automatically.
 You provide args and kwargs for each one of the entity's component. You can add
-systems which entities will be added or removed from them automatically when a
-entity is freed.
+systems which entities will be added or removed from them automatically when an
+entity is returned from its or freed.
 
 - *toyblock.Pool(number_of_entities, [type_list], [args_list], systems=[system_list])*
 - *toyblock.Pool.get()*
@@ -102,6 +102,18 @@ Each time when Pool's get is called this function will be called for the returne
     def init_car(entity):
         body = entity[Body]
         body.vel = 0.0
+
+@Pool.clean
++++++++++++
+
+This decorator is called when an entity is freed.
+
+::
+
+    a_pool = toyblock.Pool(4, (Body, Graphic))
+    @a_pool.clean
+    def reset_car(entity):
+        entity[Damage].damage = 0
 
 Toyblock example usage
 ----------------------
