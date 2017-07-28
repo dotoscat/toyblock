@@ -180,7 +180,7 @@ Toyblock example usage
     # .... More setup
 
     while playing:
-        # Spawn bullets
+        # Spawn bullets and move hero
         physics(time())
         collision(hero)
         draw(canvas)
