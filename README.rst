@@ -1,6 +1,6 @@
-========
-TOYBLOCK
-========
+==============
+TOYBLOCK 2.0.0
+==============
 
 ..  image:: toyblock_logo.png
     :alt: TOYBLOCK
