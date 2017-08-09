@@ -19,6 +19,13 @@ class D(object):
         self.v = v
         self.d = d
 
+class E(object):
+    def __init__(self, a, b=0, c=0, d=0):
+        self.a = a
+        self.b = b
+        self.c = c
+        self.d = d
+
 class PoolTest(unittest.TestCase):
     def test1_get(self):
         unique = Pool(2, (A,))
@@ -34,26 +41,29 @@ class PoolTest(unittest.TestCase):
         pool = Pool(3, (A,))
         instance = pool.get()
         pool.free(instance)
-        
+
     def test5_var_args(self):
-        args = (None, (1,), None)
-        kwargs = (None, {'d': 7})
-        pool = Pool(1000, (A, D, C), args, kwargs)
+        args = (None, (1,), None, (1,))
+        kwargs = (None, {'d': 7}, None, {"d": 4, "c": 3})
+        pool = Pool(1000, (A, D, C, E), args, kwargs)
         one = pool.get()
         one_d = one[D]
+        one_e = one[E]
         self.assertEqual(one_d.v, 1)
         self.assertEqual(one_d.d, 7)
         self.assertEqual(one[A].a, 0)
+        self.assertEqual(one_e.c, 3)
+        self.assertEqual(one_e.d, 4)
 
     def test6_single_args(self):
         args = (
             ((1,), None),
         )
-        
+
         pool = Pool(10, (D, A), args)
-    
+
     def test7_system_management(self):
-        
+
         @toyblock.system
         def system_a(system, entity):
             print("I am A", entity, entity.pool)
@@ -73,35 +83,35 @@ class PoolTest(unittest.TestCase):
         system_b()
 
     def test8_entity_init(self):
-        
+
         class One:
             def __init__(self):
                 self.a = 0
                 self.b = 0
-        
+
         @toyblock.system
         def system(system, entity):
             one = entity[One]
             self.assertEqual(one.a, 7)
             self.assertEqual(one.b, 12)
-            
+
         pool = toyblock.Pool(10, (One,), systems=(system,))
-        
+
         @pool.init
         def init_one(entity):
             one = entity[One]
             one.a = 7
             one.b = 12
-            
+
         pool.get()
         system()
 
     def test9_entity_clean(self):
-        
+
         class Accumulator:
             def __init__(self):
                 self.step = 0
-                
+
         @toyblock.system
         def accumulate(system, entity):
             accu = entity[Accumulator]
@@ -126,9 +136,9 @@ class PoolTest(unittest.TestCase):
     def test10_free_all(self):
         class Times:
             times = 0
-            
+
         pool = toyblock.Pool(10, (A,))
-                
+
         @pool.clean
         def clean_object(entity):
             Times.times += 1
@@ -146,7 +156,7 @@ class EntityTest(unittest.TestCase):
 
     def test1_add_component(self):
         self.entity.add_component(self.a)
-        
+
     def test2_get_component(self):
         self.entity.add_component(self.a)
         self.assertEqual(self.entity[A], self.a)
@@ -155,7 +165,7 @@ class EntityTest(unittest.TestCase):
         self.entity.add_component(self.a)
         self.assertRaises(toyblock.EntityComponentExistsError,
                           self.entity.add_component, A())
-    
+
     def test4_entity_creation_with_components(self):
         entity = Entity(self.a, self.b)
         self.assertEqual(entity[A], self.a)
@@ -172,16 +182,16 @@ class SystemTest(unittest.TestCase):
             b.b += 1
             a.a = b.b*2
             a.system = system
-        
+
         self.system = system
-        self.hello = "Hello!"        
-        
+        self.hello = "Hello!"
+
     def _add_entities_to_system(self):
         for entity in self.entities:
             entity.add_component(A())
             entity.add_component(B())
             self.system.add_entity(entity)
-        
+
     def test1_add_entities(self):
         self.entities = [Entity() for i in range(100)]
         self._add_entities_to_system()
@@ -195,31 +205,31 @@ class SystemTest(unittest.TestCase):
         self.system(self.hello)
         self.assertEqual(entity[A].a, 2)
         self.assertEqual(entity[A].system, self.system)
-        
+
     def test3_manipulate_entities(self):
         one = Entity()
         two = Entity()
-    
+
         @toyblock.system
         def system(system, entity, two):
             system.remove_entity(entity)
             system.add_entity(two)
             self.assertFalse(two in entity)
-    
+
         system.add_entity(one)
         system(two)
         self.assertFalse(one in system)
         self.assertTrue(two in system)
-        
+
     def test4_run_varargs(self):
-        
+
         i = 2
-        
+
         @toyblock.system
         def system(system, entity, number):
             a = entity[A]
             a.a += number
-            
+
         entity = Entity(A())
         system.add_entity(entity)
         system(i)
@@ -227,11 +237,10 @@ class SystemTest(unittest.TestCase):
         self.assertEqual(a.a, 2)
 
     def test5_decorator(self):
-        
+
         @toyblock.system
         def print_entity(system, entity):
             print(entity)
-        
+
         print_entity.add_entity(Entity())
         print_entity()
-        
