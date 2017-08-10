@@ -195,7 +195,7 @@ class SystemTest(unittest.TestCase):
     def test1_add_entities(self):
         self.entities = [Entity() for i in range(100)]
         self._add_entities_to_system()
-        self.assertEqual(len(self.system._entities), 100)
+        self.assertEqual(len(self.system.entities), 100)
 
     def test2_run_system(self):
         entity = Entity()
