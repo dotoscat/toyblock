@@ -19,13 +19,6 @@ class D(object):
         self.v = v
         self.d = d
 
-class E(object):
-    def __init__(self, a, b=0, c=0, d=0):
-        self.a = a
-        self.b = b
-        self.c = c
-        self.d = d
-
 class PoolTest(unittest.TestCase):
     def test1_get(self):
         unique = Pool(2, (A,))
@@ -43,17 +36,14 @@ class PoolTest(unittest.TestCase):
         pool.free(instance)
 
     def test5_var_args(self):
-        args = (None, (1,), None, (1,))
-        kwargs = (None, {'d': 7}, None, {"d": 4, "c": 3})
-        pool = Pool(1000, (A, D, C, E), args, kwargs)
+        args = (None, (1,), None)
+        kwargs = (None, {'d': 7})
+        pool = Pool(1000, (A, D, C), args, kwargs)
         one = pool.get()
         one_d = one[D]
-        one_e = one[E]
         self.assertEqual(one_d.v, 1)
         self.assertEqual(one_d.d, 7)
         self.assertEqual(one[A].a, 0)
-        self.assertEqual(one_e.c, 3)
-        self.assertEqual(one_e.d, 4)
 
     def test6_single_args(self):
         args = (
@@ -170,6 +160,21 @@ class EntityTest(unittest.TestCase):
         entity = Entity(self.a, self.b)
         self.assertEqual(entity[A], self.a)
         self.assertEqual(entity[B], self.b)
+
+    def test5_set_component(self):
+        class G(object):
+            def __init__(self):
+                self.a = 0
+                self.b = 0
+                self.c = 0
+
+        entity = Entity()
+        entity.add_component(G())
+        entity.set_component(G, {"a": 1, "b": 2, "c": 3})
+        g = entity[G]
+        self.assertEqual(g.a, 1)
+        self.assertEqual(g.b, 2)
+        self.assertEqual(g.c, 3)
 
 class SystemTest(unittest.TestCase):
     def setUp(self):

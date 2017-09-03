@@ -106,6 +106,14 @@ class Entity(object):
         if self._pool is not None: raise EntityBelongsToPoolError(self)
         return self._components.pop(type_, None)
 
+    def set_component(self, type_, dict_):
+        """
+            Convenient method for setting attributes to a component from a dict.
+        """
+        component = self[type_]
+        for key in dict_:
+            setattr(component, key, dict_[key])
+
     def free(self):
         if self._pool is None: return
         self._pool._free(self)

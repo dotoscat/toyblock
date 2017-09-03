@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- set_component to Entity
 - property 'entities' to System
 - System decorator
 - System constructor raises TypeError if a callable is not passed
