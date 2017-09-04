@@ -9,8 +9,18 @@ Welcome to toyblock's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+ 
+.. automodule:: toyblock
 
 .. autoclass:: toyblock.Entity
+    :members:
+
+.. autoclass:: toyblock.System
+    :members:
+    :special-members:
+
+.. autoclass:: toyblock.Pool
+    :members:
 
 Indices and tables
 ==================
