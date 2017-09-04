@@ -47,23 +47,21 @@ class EntityBelongsToPoolError(EntityError):
         return "{} belongs to {}".format(self.entity, self.entity.pool)
 
 class Entity(object):
+    __slots__ = ('_components', '_pool', '_systems')
     """Entity use the type of the instances used as components as key
     for the instance.
-
-    You will not find two instances of the same kind in a entity.
-
-    You can pass different instances to the constructor.
-
-    `Entity(MyBody(x, y), CoolGraphics())`
-
     """
-    __slots__ = ('_components', '_pool', '_systems')
 
     @property
     def pool(self):
         return self._pool
 
     def __init__(self, *instances, pool=None):
+        """
+            Bwaaah!
+
+            :raises EntityComponentExistsError:
+        """
         self._pool = pool
         self._components = {}
         add_component = self.add_component

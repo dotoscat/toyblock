@@ -10,7 +10,13 @@ Welcome to toyblock's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+.. automodule:: toyblock
+    :members:
+    :special-members:
 
+.. autoclass:: toyblock.Entity
+    :members:
+    :special-members:
 
 Indices and tables
 ==================
