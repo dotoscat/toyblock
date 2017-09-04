@@ -1,5 +1,5 @@
 .. toyblock documentation master file, created by
-   sphinx-quickstart on Mon May  1 19:09:03 2017.
+   sphinx-quickstart on Mon Sep  4 12:31:07 2017.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
