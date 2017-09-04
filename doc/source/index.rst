@@ -9,11 +9,13 @@ Welcome to toyblock's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
- 
+
 .. automodule:: toyblock
 
 .. autoclass:: toyblock.Entity
     :members:
+    
+    .. automethod:: __getitem__
 
 .. autoclass:: toyblock.System
     :members:

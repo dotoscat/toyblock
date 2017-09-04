@@ -47,19 +47,18 @@ class EntityBelongsToPoolError(EntityError):
         return "{} belongs to {}".format(self.entity, self.entity.pool)
 
 class Entity(object):
+    """
+        Entity use the instances as components and their types as key.
+
+        :param iterable(instance) instances: Instances of components.
+        :param pool: Pool which this entity belongs to.
+        :type pool: Pool or None
+        :returns: A new Entity instance.
+        :raises EntityComponentExistsError: If the type of instance is already used
+    """
     __slots__ = ('_components', '_pool', '_systems')
 
-    """
-        Entity use the type of the instances used as components as key
-        for the instance.
-    """
-
     def __init__(self, *instances, pool=None):
-        """
-            Bwaaah!
-
-            :raises EntityComponentExistsError:
-        """
         self._pool = pool
         self._components = {}
         add_component = self.add_component
@@ -69,6 +68,7 @@ class Entity(object):
 
     @property
     def pool(self):
+        """You can now if this entity belongs to a Pool. Read only."""
         return self._pool
 
     def _add_system(self, system):
@@ -86,12 +86,27 @@ class Entity(object):
     def add_component(self, instance):
         """Add a component instance to this entity.
 
-        It raises 'EntityComponentExistsError' if the type of instance is already used.
+            :param instance instance:
+
+            :raises EntityBelongsToPoolError: If this entity belongs to a Pool.
+            :raises EntityComponentExistsError: If the type of instance is already used.
         """
         if self._pool is not None: raise EntityBelongsToPoolError(self)
         self._add_component(instance)
 
     def __getitem__(self, type_):
+        """
+            This is a convenient, less verbose, way to get a component
+            and manipulate it.
+
+            :params type type_: Type of the instance
+            :returns: instance of Type if exists, otherwise None
+
+            .. code-block:: python
+
+                entity = Entity(Body(), Graphic())
+                entity[Body].x = 7.
+        """
         return self._components.get(type_)
 
     def get_component(self, type_):
