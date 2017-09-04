@@ -48,13 +48,11 @@ class EntityBelongsToPoolError(EntityError):
 
 class Entity(object):
     __slots__ = ('_components', '_pool', '_systems')
-    """Entity use the type of the instances used as components as key
-    for the instance.
-    """
 
-    @property
-    def pool(self):
-        return self._pool
+    """
+        Entity use the type of the instances used as components as key
+        for the instance.
+    """
 
     def __init__(self, *instances, pool=None):
         """
@@ -68,6 +66,10 @@ class Entity(object):
         for instance in instances:
             add_component(instance)
         self._systems = deque()
+
+    @property
+    def pool(self):
+        return self._pool
 
     def _add_system(self, system):
         self._systems.append(system)
