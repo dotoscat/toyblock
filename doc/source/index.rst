@@ -19,7 +19,10 @@ Welcome to toyblock's documentation!
 
 .. autoclass:: toyblock.System
     :members:
-    :special-members:
+    
+    .. automethod:: __call__
+    
+.. autofunction:: toyblock.system
 
 .. autoclass:: toyblock.Pool
     :members:

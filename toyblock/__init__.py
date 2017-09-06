@@ -139,7 +139,7 @@ class Entity(object):
         return self._components.pop(type_, None)
 
     def set_component(self, type_, dict_):
-        """Convenient method for setting attributes to a component from a dict.
+        """Convenient method for setting attributes to a component with a dict.
         
         Parameters:
             type\_: A instance of *type_*.
@@ -148,7 +148,15 @@ class Entity(object):
         Example:
             .. code-block:: python
             
-                player.set_component[Body, {'x': 32., 'y': 64.}]
+                #  This is more easy
+            
+                player.set_component(Body, {'x': 32., 'y': 64.})
+                
+                #  than
+                
+                player[Body].x = 2.
+                player[Body].y = 7.
+                
         """
         component = self[type_]
         for key in dict_:
@@ -169,18 +177,24 @@ class Entity(object):
         return item in self._components
 
 class System(object):
-    """
-    A bunch of entities by themselves are useless. You must add them
-    to a system, then interact with them.
+    """Define how are entities processed here.
 
-    In the constructor is mandatory pass a callable. You can pass other arguments
-    that will passed to the callable for each entity.
-
+    In the constructor is mandatory pass a callable.
+    After you add at least one entity you can run the system calling it.
+    
+    Parameters:
+        callable\_: A callable
+    
     .. note::
+    
+        The signature for the callable is
+        
+        .. code-block:: python
+        
+            callable(system, entity, *args, **kwargs)
 
-        The callable signature is (system, entity, *args, **kwargs).
-
-    After you add at least one entity you can run the system calling it*
+    Returns:
+        A System instance which is callable.
     """
     def __init__(self, callable_):
         if not callable(callable_):
@@ -199,9 +213,16 @@ class System(object):
 
     @property
     def entities(self):
+        """Get the entities added to this system."""
         return self._entities
 
     def add_entity(self, entity):
+        """Add an entity to this System.
+        
+        Parameters:
+            entity (Entity)
+        
+        """
         if self in entity: return
         if self._locked:
             self._entities_added_append(entity)
@@ -210,6 +231,12 @@ class System(object):
             entity._add_system(proxy(self))
 
     def remove_entity(self, entity):
+        """Remove an entity from this System.
+        
+        Parameters:
+            entity (Entity)
+        
+        """
         if self not in entity: return
         if self._locked:
             self._entities_removed_append(entity)
@@ -218,8 +245,9 @@ class System(object):
             entity._remove_system(self)
 
     def __call__(self, *args, **kwargs):
-        """Run the system. In the callable is perfectly safe add or remove entities
-        to the system.
+        """Run the system.
+        
+        It is perfectly safe add entities to the system or remove entities from the system.
         """
         if self._locked: return
         entities = self._entities
@@ -246,19 +274,27 @@ class System(object):
         return len(self._entities)
 
 def system(callable_):
-    """This is a decorator for System.
+    """This is a decorator for :class:`System`.
 
-    Example of use:
+    The use of this decorator is **encouraged** instead of use :class:`System` directly.
 
-    @toyblock.system
-    def physics(system, entity, dt):
-        # do your things here
+    Parameters:
+        callable\_: A callable
 
-    physics.add_entity(some_entity)
+    Returns:
+        A :class:`System` instance.
 
-    # ...
+    Example:
+        .. code-block:: python
 
-    physics(get_delta_time())
+            @toyblock.system
+            def physics(system, entity, dt):
+                pass
+                # do your things here
+
+            physics.add_entity(some_entity)
+            # ...
+            physics(get_delta_time())
     """
     if not callable(callable_):
         raise TypeError("Use this as a DECORATOR")
