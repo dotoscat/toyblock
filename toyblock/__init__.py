@@ -50,7 +50,7 @@ class Entity(object):
     """
         Entity use the instances as components and their types as key.
 
-        :param iterable(instance) instances: Instances of components.
+        :param instances: Instances of any type.
         :param pool: Pool which this entity belongs to.
         :type pool: Pool or None
         :returns: A new Entity instance.
@@ -68,7 +68,7 @@ class Entity(object):
 
     @property
     def pool(self):
-        """You can now if this entity belongs to a Pool. Read only."""
+        """You can check whether this entity belongs to a Pool. Read only."""
         return self._pool
 
     def _add_system(self, system):
@@ -99,8 +99,8 @@ class Entity(object):
             This is a convenient, less verbose, way to get a component
             and manipulate it.
 
-            :params type type_: Type of the instance
-            :returns: instance of Type if exists, otherwise None
+            :param type_: Type of the instance
+            :returns: Instance of *type_* if exists, otherwise *None*
 
             .. code-block:: python
 
@@ -110,26 +110,47 @@ class Entity(object):
         return self._components.get(type_)
 
     def get_component(self, type_):
-        warnings.warn("Use [type_] instead", DeprecationWarning, stacklevel=2)
+        """
+            .. deprecated:: 2.0.0
+                Use :func:`__getitem__` instead.
+        """
+        warnings.warn("Use __getitem__ instead", DeprecationWarning, stacklevel=2)
         return self.__getitem__(type_)
 
     def del_component(self, type_):
-        """Delete a specific component.
+        """
+        Delete a specific component. Remove and returns the instance of *type_*.
 
-        Return the deleted component(instance), None if not exists.
+        :param type_: A instance of *type_*
+        :returns: The removed instance from this entity,
+            or None if not exists.
         """
         if self._pool is not None: raise EntityBelongsToPoolError(self)
         return self._components.pop(type_, None)
 
     def set_component(self, type_, dict_):
         """
-            Convenient method for setting attributes to a component from a dict.
+        Convenient method for setting attributes to a component from a dict.
+        
+        :param type_: A instance of *type_*.
+        :param dict_: Dict to use for the component.
+        
+        .. code-block:: python
+            
+            player.set_component[Body, {'x': 32., 'y': 64.}]
+            
         """
         component = self[type_]
         for key in dict_:
             setattr(component, key, dict_[key])
 
     def free(self):
+        """
+        Make this entity avaliable from its `Pool`. The entity it is
+        removed from the systems that are asigned to :class:`Pool`.
+        
+        If this entity does not have a Pool then this method does nothing. 
+        """
         if self._pool is None: return
         self._pool._free(self)
 
