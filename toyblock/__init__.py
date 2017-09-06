@@ -39,7 +39,7 @@ class EntityComponentExistsError(EntityError):
         return "Component {} already exists in entity {}".format(self.class_, self.entity)
 
 class EntityBelongsToPoolError(EntityError):
-    """This is raised when the entity belongs to a Pool"""
+    """This is raised when the entity belongs to a Pool."""
     def __init__(self, entity):
         self.entity = entity
 
@@ -47,15 +47,19 @@ class EntityBelongsToPoolError(EntityError):
         return "{} belongs to {}".format(self.entity, self.entity.pool)
 
 class Entity(object):
+    """A bag where you group the components.
+    
+    Parameters:
+        *instances (Any): Instances of any type
+        pool (Pool or None): Pool which this entity belongs to.
+        
+    Returns:
+        A new Entity instance.
+        
+    Raises:
+        EntityComponentExistsError: If the type of a instance is already used.
     """
-        Entity use the instances as components and their types as key.
 
-        :param instances: Instances of any type.
-        :param pool: Pool which this entity belongs to.
-        :type pool: Pool or None
-        :returns: A new Entity instance.
-        :raises EntityComponentExistsError: If the type of instance is already used
-    """
     __slots__ = ('_components', '_pool', '_systems')
 
     def __init__(self, *instances, pool=None):
@@ -86,24 +90,29 @@ class Entity(object):
     def add_component(self, instance):
         """Add a component instance to this entity.
 
-            :param instance instance:
-
-            :raises EntityBelongsToPoolError: If this entity belongs to a Pool.
-            :raises EntityComponentExistsError: If the type of instance is already used.
+        Parameters:
+            instance (Any): An instance of any class.
+        
+        Raises:
+            EntityBelongsToPoolError: If this entity belongs to a Pool.
+            EntityComponentExistsError: If the type of instance is already used.
         """
         if self._pool is not None: raise EntityBelongsToPoolError(self)
         self._add_component(instance)
 
     def __getitem__(self, type_):
-        """
-            This is a convenient, less verbose, way to get a component
-            and manipulate it.
+        """This is a convenient, less verbose, way to get a component
+        and manipulate it.
 
-            :param type_: Type of the instance
-            :returns: Instance of *type_* if exists, otherwise *None*
+        Parameters:
+            type\_: Type of the instance
+            
+        Returns:
+            Instance of *type_* if exists, otherwise *None*
 
+        Example:
             .. code-block:: python
-
+                
                 entity = Entity(Body(), Graphic())
                 entity[Body].x = 7.
         """
@@ -118,27 +127,28 @@ class Entity(object):
         return self.__getitem__(type_)
 
     def del_component(self, type_):
-        """
-        Delete a specific component. Remove and returns the instance of *type_*.
+        """Delete a specific component. Remove and returns the instance of *type_*.
 
-        :param type_: A instance of *type_*
-        :returns: The removed instance from this entity,
-            or None if not exists.
+        Parameters:
+            type\_: A instance of *type_*
+        
+        Returns:
+            The removed instance from this entity, or None if not exists.
         """
         if self._pool is not None: raise EntityBelongsToPoolError(self)
         return self._components.pop(type_, None)
 
     def set_component(self, type_, dict_):
-        """
-        Convenient method for setting attributes to a component from a dict.
+        """Convenient method for setting attributes to a component from a dict.
         
-        :param type_: A instance of *type_*.
-        :param dict_: Dict to use for the component.
+        Parameters:
+            type\_: A instance of *type_*.
+            dict\_: Dict to use for the component.
         
-        .. code-block:: python
+        Example:
+            .. code-block:: python
             
-            player.set_component[Body, {'x': 32., 'y': 64.}]
-            
+                player.set_component[Body, {'x': 32., 'y': 64.}]
         """
         component = self[type_]
         for key in dict_:
