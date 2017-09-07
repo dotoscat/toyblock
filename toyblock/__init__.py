@@ -288,24 +288,40 @@ class System(object):
         return len(self._entities)
 
 class Pool(object):
-    """
-    A Pool is used for cache created objects.
+    """Manage entities and manage systems related to entities.
+    
+    Parameters:
+        maxlen (int): Total number of entities.
+        types (iterable of classes):
+        args_list (iterable): A list of args for the classes.
+        kwargs_list (iterable): A list of kwargs for the classes.
+        systems (iterable of System): Systems related with these entities.
+    
+    Returns:
+        A instance of Pool.
+        
+    Example:
+        .. code-block:: python
+        
+            class A:
+                def __init__(self, a, b):
+                    self.a = a
+                    self.b = b
+                    
+            class B:
+                def __init__(self, a=0):
+                    self.a = a
+                    
+            class C:
+                def __init__(self):
+                    self.things = []
+        
+            args = ((1, 2),)
+            kwargs = (None, {"a": 7})
+            pool = toyblock.Pool(10, (A, B, C), args, kwargs)
+    
     """
     def __init__(self, maxlen, types, args_list=(), kwargs_list=(), systems=None):
-        """
-        Parameters:
-
-        maxlen: Number of entities (Number).
-        types: Types for the entities (Sequence) with the classes.
-        args_for_types: Tuples of args for the instances of types
-        [(args, kwargs), ...]
-
-        Example of use
-
-        args = ((1, 2),)
-        kwargs = (None, {"a": 7})
-        pool = toyblock.Pool(10, (A, B, C), args, kwargs)
-        """
         self._init = None
         self._clean = None
         self._systems = systems
@@ -343,8 +359,7 @@ class Pool(object):
         return clean
 
     def get(self):
-        """Return a free Entity if avaliable, None otherwise.
-        """
+        """Return a free :class:`Entity` if avaliable, None otherwise."""
         if not self._avaliable:
             return None
         entity = self._avaliable_pop()
@@ -358,10 +373,15 @@ class Pool(object):
         return entity
 
     def free(self, entity):
+        """
+            .. deprecated:: 2.0.0
+                Use :func:`Entity.free` instead.
+        """
         warnings.warn("Use Entity.free() instead", DeprecationWarning, stacklevel=2)
         self._free(entity)
 
     def free_all(self):
+        """Release all the used entities."""
         while len(self._used):
             self._free(self._used[0])
 
