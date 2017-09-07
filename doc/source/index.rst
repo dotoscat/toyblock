@@ -22,8 +22,6 @@ Welcome to toyblock's documentation!
     
     .. automethod:: __call__
     
-.. autofunction:: toyblock.system
-
 .. autoclass:: toyblock.Pool
     :members:
 

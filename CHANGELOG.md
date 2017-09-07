@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - set_component to Entity
 - property 'entities' to System
-- System decorator
 - System constructor raises TypeError if a callable is not passed
 - pool property to Entity
 - free() to Entity

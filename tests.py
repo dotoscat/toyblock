@@ -54,11 +54,11 @@ class PoolTest(unittest.TestCase):
 
     def test7_system_management(self):
 
-        @toyblock.system
+        @System
         def system_a(system, entity):
             print("I am A", entity, entity.pool)
 
-        @toyblock.system
+        @System
         def system_b(system, entity):
             print("I am B", entity, entity.pool)
 
@@ -79,7 +79,7 @@ class PoolTest(unittest.TestCase):
                 self.a = 0
                 self.b = 0
 
-        @toyblock.system
+        @System
         def system(system, entity):
             one = entity[One]
             self.assertEqual(one.a, 7)
@@ -102,7 +102,7 @@ class PoolTest(unittest.TestCase):
             def __init__(self):
                 self.step = 0
 
-        @toyblock.system
+        @System
         def accumulate(system, entity):
             accu = entity[Accumulator]
             accu.step += 1
@@ -179,7 +179,7 @@ class EntityTest(unittest.TestCase):
 class SystemTest(unittest.TestCase):
     def setUp(self):
 
-        @toyblock.system
+        @System
         def system(system, entity, random):
             self.assertEqual(random, "Hello!")
             a = entity[A]
@@ -215,7 +215,7 @@ class SystemTest(unittest.TestCase):
         one = Entity()
         two = Entity()
 
-        @toyblock.system
+        @System
         def system(system, entity, two):
             system.remove_entity(entity)
             system.add_entity(two)
@@ -230,7 +230,7 @@ class SystemTest(unittest.TestCase):
 
         i = 2
 
-        @toyblock.system
+        @System
         def system(system, entity, number):
             a = entity[A]
             a.a += number
@@ -243,7 +243,7 @@ class SystemTest(unittest.TestCase):
 
     def test5_decorator(self):
 
-        @toyblock.system
+        @System
         def print_entity(system, entity):
             print(entity)
 

@@ -182,6 +182,8 @@ class System(object):
     In the constructor is mandatory pass a callable.
     After you add at least one entity you can run the system calling it.
     
+    Use this as a decorator is **encouraged**. See `Example`.
+    
     Parameters:
         callable\_: A callable
     
@@ -195,6 +197,18 @@ class System(object):
 
     Returns:
         A System instance which is callable.
+    
+    Example:
+        .. code-block:: python
+
+            @toyblock.System
+            def physics(system, entity, dt):
+                pass
+                # do your things here
+
+            physics.add_entity(some_entity)
+            # ...
+            physics(get_delta_time())
     """
     def __init__(self, callable_):
         if not callable(callable_):
@@ -272,33 +286,6 @@ class System(object):
 
     def __len__(self):
         return len(self._entities)
-
-def system(callable_):
-    """This is a decorator for :class:`System`.
-
-    The use of this decorator is **encouraged** instead of use :class:`System` directly.
-
-    Parameters:
-        callable\_: A callable
-
-    Returns:
-        A :class:`System` instance.
-
-    Example:
-        .. code-block:: python
-
-            @toyblock.system
-            def physics(system, entity, dt):
-                pass
-                # do your things here
-
-            physics.add_entity(some_entity)
-            # ...
-            physics(get_delta_time())
-    """
-    if not callable(callable_):
-        raise TypeError("Use this as a DECORATOR")
-    return System(callable_)
 
 class Pool(object):
     """
