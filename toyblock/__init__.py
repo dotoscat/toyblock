@@ -138,7 +138,7 @@ class Entity(object):
         if self._pool is not None: raise EntityBelongsToPoolError(self)
         return self._components.pop(type_, None)
 
-    def set_component(self, type_, dict_):
+    def set(self, type_, dict_):
         """Convenient method for setting attributes to a component with a dict.
         
         Parameters:
@@ -150,7 +150,7 @@ class Entity(object):
             
                 #  This is more easy
             
-                player.set_component(Body, {'x': 32., 'y': 64.})
+                player.set(Body, {'x': 32., 'y': 64.})
                 
                 #  than
                 
@@ -289,7 +289,7 @@ class System(object):
 
 class Pool(object):
     """
-    A Pool is used for cache created objects and increase performance.
+    A Pool is used for cache created objects.
     """
     def __init__(self, maxlen, types, args_list=(), kwargs_list=(), systems=None):
         """

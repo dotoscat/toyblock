@@ -170,7 +170,7 @@ class EntityTest(unittest.TestCase):
 
         entity = Entity()
         entity.add_component(G())
-        entity.set_component(G, {"a": 1, "b": 2, "c": 3})
+        entity.set(G, {"a": 1, "b": 2, "c": 3})
         g = entity[G]
         self.assertEqual(g.a, 1)
         self.assertEqual(g.b, 2)
