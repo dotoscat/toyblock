@@ -154,8 +154,8 @@ class Entity(object):
                 
                 #  than
                 
-                player[Body].x = 2.
-                player[Body].y = 7.
+                player[Body].x = 32.
+                player[Body].y = 64.
                 
         """
         component = self[type_]
@@ -165,9 +165,19 @@ class Entity(object):
     def free(self):
         """
         Make this entity avaliable from its `Pool`. The entity it is
-        removed from the systems that are asigned to :class:`Pool`.
+        removed from the systems that are asigned to :class:`Pool`. You
+        can use this method inside a :class:`System` call.
         
-        If this entity does not have a Pool then this method does nothing. 
+        If this entity does not have a Pool then this method does nothing.
+        
+        Example:
+            
+            .. code-block:: python
+            
+                @toyblock.System
+                def life(system, entity):
+                    if entity[Life].is_over():
+                        entity.free()
         """
         if self._pool is None: return
         self._pool._free(self)
