@@ -208,6 +208,9 @@ class System(object):
     Returns:
         A System instance which is callable.
     
+    Raises:
+        TypeError: If you do not pass a callable.
+    
     Example:
         .. code-block:: python
 
@@ -328,7 +331,7 @@ class Pool(object):
         
             args = ((1, 2),)
             kwargs = (None, {"a": 7})
-            pool = toyblock.Pool(10, (A, B, C), args, kwargs)
+            pool = toyblock.Pool(10, (A, B, C), args, kwargs, systems=(input, physics, touch, life))
     
     """
     def __init__(self, maxlen, types, args_list=(), kwargs_list=(), systems=None):
