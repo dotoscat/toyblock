@@ -359,11 +359,23 @@ class Pool(object):
         self._used_remove = self._used.remove
         self._avaliable_append = self._avaliable.append
 
-    def init(self, init):
-        if not callable(init):
-            raise TypeError("Use this as a DECORATOR")
-        self._init = init
-        return init
+    def init(self, callable_):
+        """This a method decorator which is called when :method:`get` returns
+        a instance of :class:`Entity`
+        
+        Parameters:
+            callable_ (callable):
+        
+        Returns:
+            The same callable passed as parameter.
+            
+        Raises:
+            TypeError: if callable_ is not callable.
+        """
+        if not callable(callable_):
+            raise TypeError("Pass a callable object.")
+        self._init = callable_
+        return callable_
 
     def clean(self, clean):
         if not callable(clean):
