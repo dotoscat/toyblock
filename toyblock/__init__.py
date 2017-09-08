@@ -360,17 +360,16 @@ class Pool(object):
         self._avaliable_append = self._avaliable.append
 
     def init(self, callable_):
-        """This a method decorator which is called when :method:`get` returns
-        a instance of :class:`Entity`
+        """This a method decorator.
         
         Parameters:
-            callable_ (callable):
+            callable\_ (callable): Called when :func:`get` returns a instance of :class:`Entity`.
         
         Returns:
             The same callable passed as parameter.
             
         Raises:
-            TypeError: if callable_ is not callable.
+            TypeError: if callable\_ is not callable.
         """
         if not callable(callable_):
             raise TypeError("Pass a callable object.")
