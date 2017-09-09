@@ -397,6 +397,14 @@ class Pool(object):
             
         Raises:
             TypeError: if clean\_ is not callable.
+            
+        Example:
+            .. code-block:: python
+            
+                a_pool = toyblock.Pool(4, (Body, Graphic))
+                @a_pool.clean
+                def reset_car(entity):
+                    entity[Damage].damage = 0 #  For example
         """
         if not callable(clean_):
             raise TypeError("Pass a callable object")
