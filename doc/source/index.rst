@@ -9,6 +9,8 @@ Welcome to toyblock's |version| documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   
+   Full example <example>
 
 .. automodule:: toyblock
 
