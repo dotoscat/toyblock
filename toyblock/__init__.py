@@ -376,11 +376,22 @@ class Pool(object):
         self._init = callable_
         return callable_
 
-    def clean(self, clean):
+    def clean(self, clean_):
+        """Use this as a decorator. The clean function is called when an :class:`Entity` is freed.
+        
+        Parameters:
+            clean\_ (callable):
+        
+        Returns:
+            The same callable passed as parameter.
+            
+        Raises:
+            TypeError: if clean\_ is not callable.
+        """
         if not callable(clean):
-            raise TypeError("Use this as a DECORATOR")
-        self._clean = clean
-        return clean
+            raise TypeError("Pass a callable object")
+        self._clean = clean_
+        return clean_
 
     def get(self):
         """Return a free :class:`Entity` if avaliable, None otherwise."""
