@@ -359,28 +359,28 @@ class Pool(object):
         self._used_remove = self._used.remove
         self._avaliable_append = self._avaliable.append
 
-    def init(self, callable_):
-        """This a method decorator.
+    def init(self, init_):
+        """Called when :func:`get` returns a instance of :class:`Entity`.
         
         Parameters:
-            callable\_ (callable): Called when :func:`get` returns a instance of :class:`Entity`.
+            init\_ (callable): Signature is init_(entity)
         
         Returns:
             The same callable passed as parameter.
             
         Raises:
-            TypeError: if callable\_ is not callable.
+            TypeError: if init\_ is not callable.
         """
-        if not callable(callable_):
+        if not callable(init_):
             raise TypeError("Pass a callable object.")
-        self._init = callable_
-        return callable_
+        self._init = init_
+        return init_
 
     def clean(self, clean_):
-        """Use this as a decorator. The clean function is called when an :class:`Entity` is freed.
+        """The clean function is called when an :class:`Entity` is freed.
         
         Parameters:
-            clean\_ (callable):
+            clean\_ (callable): Signature is clean_(entity)
         
         Returns:
             The same callable passed as parameter.
@@ -388,7 +388,7 @@ class Pool(object):
         Raises:
             TypeError: if clean\_ is not callable.
         """
-        if not callable(clean):
+        if not callable(clean_):
             raise TypeError("Pass a callable object")
         self._clean = clean_
         return clean_
