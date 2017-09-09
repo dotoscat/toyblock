@@ -370,6 +370,16 @@ class Pool(object):
             
         Raises:
             TypeError: if init\_ is not callable.
+            
+        Example:
+            .. code-block:: python
+            
+                a_pool = toyblock.Pool(4, (Body, Graphic))
+                @a_pool.init
+                def init_car(entity):
+                    body = entity[Body]
+                    body.vel = 0.0
+                    #  entity[Body].vel = 0.0
         """
         if not callable(init_):
             raise TypeError("Pass a callable object.")
